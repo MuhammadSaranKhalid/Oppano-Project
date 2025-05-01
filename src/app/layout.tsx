@@ -4,10 +4,17 @@ import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 import routerProvider from "@refinedev/nextjs-router";
 import { Metadata } from "next";
 import React, { Suspense } from "react";
+import { Inter } from "next/font/google";
 
 import { authProviderClient } from "@providers/auth-provider/auth-provider.client";
 import { dataProvider } from "@providers/data-provider";
-import "@styles/global.css";
+import "./globals.css";
+import { IconSidebar } from "@components/icon-sidebar";
+import { AppSidebar } from "@components/sidebar";
+import { Toaster } from "@components/ui/toaster";
+import { AuthProvider } from "@components/auth/auth-provider";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Refine",
@@ -24,9 +31,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className={inter.className}>
         <Suspense>
-          <GitHubBanner />
+          {/* <GitHubBanner /> */}
           <RefineKbarProvider>
             <DevtoolsProvider>
               <Refine
@@ -40,7 +47,16 @@ export default function RootLayout({
                   projectId: "aT4IBS-xQMoSw-5p90yQ",
                 }}
               >
-                {children}
+                {/* {children} */}
+                {/* <ThemeProvider
+                  attribute="class"
+                  defaultTheme="light"
+                  enableSystem
+                > */}
+                <AuthProvider>{children}</AuthProvider>
+                {/* </ThemeProvider> */}
+                <Toaster />
+                {/* {children} */}
                 <RefineKbar />
               </Refine>
             </DevtoolsProvider>
