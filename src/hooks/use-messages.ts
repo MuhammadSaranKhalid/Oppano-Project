@@ -2,7 +2,7 @@
 
 import { useList, useOne, useCreate, useUpdate, useDelete } from "@refinedev/core"
 import { useState } from "react"
-import { useNotification } from "@/providers/notification-provider"
+// import { useNotification } from "@/providers/notification-provider"
 
 /**
  * Custom hook for managing messages
@@ -10,16 +10,22 @@ import { useNotification } from "@/providers/notification-provider"
  */
 export function useMessages() {
   const [isLoading, setIsLoading] = useState(false)
-  const notification = useNotification()
+  // const notification = useNotification()
   const { mutate: createMutate } = useCreate()
   const { mutate: updateMutate } = useUpdate()
   const { mutate: deleteMutate } = useDelete()
-  const [messagesData, setMessagesData] = useState<{
-    messages: any[]
-    total: number
-    isLoading: boolean
-    isError: boolean
-  }>({ messages: [], total: 0, isLoading: false, isError: false })
+  const {
+    data: messagesData,
+    isLoading: listIsLoading,
+    isError: listIsError,
+    refetch,
+  } = useList({
+    resource: "messages",
+    pagination: {
+      mode: "off",
+    },
+    sorters: [{ field: "createdAt", order: "desc" }],
+  })
 
   /**
    * Fetch a list of messages with optional filtering and pagination
@@ -43,28 +49,17 @@ export function useMessages() {
       })
     }
 
-    const { data, isLoading, isError } = useList({
-      resource: "messages",
-      pagination: {
-        current: params?.page || 1,
-        pageSize: params?.pageSize || 20,
-      },
-      filters: messageFilters,
-      sorters: params?.sorters || [{ field: "createdAt", order: "desc" }],
-    })
-
-    setMessagesData({
-      messages: data?.data || [],
-      total: data?.total || 0,
-      isLoading,
-      isError,
-    })
+    const page = params?.page || 1
+    const pageSize = params?.pageSize || 20
+    
+    // Apply pagination manually
+    const paginatedMessages = messagesData?.data?.slice((page - 1) * pageSize, page * pageSize) || []
 
     return {
-      messages: messagesData?.messages || [],
+      messages: paginatedMessages,
       total: messagesData?.total || 0,
-      isLoading: messagesData?.isLoading,
-      isError: messagesData?.isError,
+      isLoading: listIsLoading,
+      isError: listIsError,
     }
   }
 
@@ -94,15 +89,15 @@ export function useMessages() {
   const createMessage = async (messageData: any) => {
     setIsLoading(true)
     try {
-      const { data } = await createMutate({
+      const data = await createMutate({
         resource: "messages",
         values: messageData,
       })
 
       setIsLoading(false)
-      return data?.data
+      return data
     } catch (error) {
-      notification.error("Failed to send message")
+      // notification.error("Failed to send message")
       setIsLoading(false)
       throw error
     }
@@ -117,16 +112,16 @@ export function useMessages() {
   const updateMessage = async (id: string, messageData: any) => {
     setIsLoading(true)
     try {
-      const { data } = await updateMutate({
+      const data = await updateMutate({
         resource: "messages",
         id,
         values: messageData,
       })
 
       setIsLoading(false)
-      return data?.data
+      return data
     } catch (error) {
-      notification.error("Failed to update message")
+      // notification.error("Failed to update message")
       setIsLoading(false)
       throw error
     }
@@ -145,10 +140,10 @@ export function useMessages() {
         id,
       })
 
-      notification.success("Message deleted successfully")
+      // notification.success("Message deleted successfully")
       setIsLoading(false)
     } catch (error) {
-      notification.error("Failed to delete message")
+      // notification.error("Failed to delete message")
       setIsLoading(false)
       throw error
     }

@@ -1,9 +1,10 @@
 "use client"
 
 import { useList, useOne } from "@refinedev/core"
+import { supabaseBrowserClient } from "@utils/supabase/client"
 import { useState } from "react"
-import { useNotification } from "@/providers/notification-provider"
-import { useSupabase } from "@/providers/supabase-provider"
+// import { useNotification } from "@/providers/notification-provider"
+// import { useSupabase } from "@/providers/supabase-provider"
 
 /**
  * Custom hook for managing users
@@ -16,8 +17,8 @@ export function useUsers(params?: {
   sorters?: any[]
 }) {
   const [isLoading, setIsLoading] = useState(false)
-  const notification = useNotification()
-  const supabase = useSupabase()
+  // const notification = useNotification()
+  // const supabase = useSupabase()
 
   const {
     data,
@@ -76,7 +77,7 @@ export function useUsers(params?: {
     setIsLoading(true)
     try {
       // Register the user with Supabase Auth
-      const { data: authData, error: authError } = await supabase.auth.signUp({
+      const { data: authData, error: authError } = await supabaseBrowserClient.auth.signUp({
         email,
         password,
         options: {
@@ -91,11 +92,11 @@ export function useUsers(params?: {
         throw authError
       }
 
-      notification.success("User registered successfully")
+      // notification.success("User registered successfully")
       setIsLoading(false)
       return authData.user
     } catch (error: any) {
-      notification.error(error.message || "Failed to register user")
+      // notification.error(error.message || "Failed to register user")
       setIsLoading(false)
       throw error
     }
@@ -110,7 +111,7 @@ export function useUsers(params?: {
   const loginUser = async (email: string, password: string) => {
     setIsLoading(true)
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabaseBrowserClient.auth.signInWithPassword({
         email,
         password,
       })
@@ -119,11 +120,11 @@ export function useUsers(params?: {
         throw error
       }
 
-      notification.success("Logged in successfully")
+      // notification.success("Logged in successfully")
       setIsLoading(false)
       return data.user
     } catch (error: any) {
-      notification.error(error.message || "Failed to login")
+      // notification.error(error.message || "Failed to login")
       setIsLoading(false)
       throw error
     }
@@ -135,16 +136,16 @@ export function useUsers(params?: {
   const logoutUser = async () => {
     setIsLoading(true)
     try {
-      const { error } = await supabase.auth.signOut()
+      const { error } = await supabaseBrowserClient.auth.signOut()
 
       if (error) {
         throw error
       }
 
-      notification.success("Logged out successfully")
+      // notification.success("Logged out successfully")
       setIsLoading(false)
     } catch (error: any) {
-      notification.error(error.message || "Failed to logout")
+      // notification.error(error.message || "Failed to logout")
       setIsLoading(false)
       throw error
     }
@@ -158,7 +159,7 @@ export function useUsers(params?: {
   const updateUserProfile = async (userData: any) => {
     setIsLoading(true)
     try {
-      const { data, error } = await supabase.auth.updateUser({
+      const { data, error } = await supabaseBrowserClient.auth.updateUser({
         data: userData,
       })
 
@@ -166,11 +167,11 @@ export function useUsers(params?: {
         throw error
       }
 
-      notification.success("Profile updated successfully")
+      // notification.success("Profile updated successfully")
       setIsLoading(false)
       return data.user
     } catch (error: any) {
-      notification.error(error.message || "Failed to update profile")
+      // notification.error(error.message || "Failed to update profile")
       setIsLoading(false)
       throw error
     }

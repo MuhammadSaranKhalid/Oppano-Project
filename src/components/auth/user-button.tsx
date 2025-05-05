@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/components/auth/auth-provider";
-import { signOut } from "@/lib/auth";
+// import { signOut } from "@/lib/auth";
 
 export function UserButton() {
   const { user, profile } = useAuth();
@@ -35,7 +35,7 @@ export function UserButton() {
   const handleSignOut = async () => {
     try {
       setIsLoading(true);
-      await signOut();
+      // await signOut();
       router.push("/");
       router.refresh();
     } catch (error) {

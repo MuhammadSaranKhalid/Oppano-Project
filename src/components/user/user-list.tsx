@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useList } from "@refinedev/core"
-import { useNotification } from "@/providers/notification-provider"
+// import { useNotification } from "@/providers/notification-provider"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
@@ -20,7 +20,7 @@ import { Badge } from "@/components/ui/badge"
 export function UserList() {
   const [users, setUsers] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const notification = useNotification()
+  // const notification = useNotification()
   const router = useRouter()
 
   // Fetch users using Refine's useList hook

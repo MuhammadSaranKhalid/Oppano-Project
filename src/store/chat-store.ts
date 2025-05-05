@@ -219,9 +219,9 @@ interface ChatStore {
   unpinChannel: (channelId: string) => void
   clearError: () => void
   updateUserStatus: (status: UserStatus, statusMessage?: string) => void
-  getUserById: (userId: string) => (typeof mockUsers)[0] | null
+  getUserById: (userId: string) => typeof mockUser | (typeof mockUsers)[0] | null
   setUserTyping: (conversationId: string, userId: string, isTyping: boolean) => void
-  getTypingUsers: (conversationId: string) => typeof mockUsers
+  getTypingUsers: (conversationId: string) => Array<typeof mockUser | (typeof mockUsers)[0]>
 }
 
 // Create the store
@@ -229,8 +229,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   currentUser: null,
   conversations: [],
   selectedConversation: null,
-  latestMessages: {},
-  unreadCounts: {},
+  latestMessages: mockLatestMessages,
+  unreadCounts: mockUnreadCounts,
   isLoading: false,
   isLoadingChannels: false,
   isLoadingDirectMessages: false,
@@ -581,6 +581,6 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     }
 
     // Get the full user objects for the typing users
-    return recentTypingUsers.map((tu) => get().getUserById(tu.userId)).filter(Boolean) as typeof mockUsers
+    return recentTypingUsers.map((tu) => get().getUserById(tu.userId)).filter(Boolean) as Array<typeof mockUser | (typeof mockUsers)[0]>
   },
 }))

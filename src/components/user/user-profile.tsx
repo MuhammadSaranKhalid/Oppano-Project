@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useOne } from "@refinedev/core"
-import { useNotification } from "@/providers/notification-provider"
+// import { useNotification } from "@/providers/notification-provider"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Spinner } from "@/components/ui/spinner"
 import { formatDate } from "@/lib/utils"
@@ -22,7 +22,7 @@ type UserProfileProps = {
 export function UserProfile({ userId }: UserProfileProps) {
   const [user, setUser] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const notification = useNotification()
+  // const notification = useNotification()
 
   // Fetch user using Refine's useOne hook
   const {

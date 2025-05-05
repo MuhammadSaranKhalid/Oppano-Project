@@ -1,8 +1,8 @@
 "use client"
 
-import { useList, useOne, useMutation } from "@refinedev/core"
+import { useList, useOne, useCreate, useUpdate, useDelete } from "@refinedev/core"
 import { useState } from "react"
-import { useNotification } from "@/providers/notification-provider"
+// import { useNotification } from "@/providers/notification-provider"
 
 /**
  * Custom hook for managing organizations
@@ -10,24 +10,17 @@ import { useNotification } from "@/providers/notification-provider"
  */
 export function useOrganizations() {
   const [isLoading, setIsLoading] = useState(false)
-  const notification = useNotification()
+  // const notification = useNotification()
 
-  const useCreateOrganizationMutation = useMutation({
-    resource: "organizations",
-    action: "create",
-  })
+  const { mutate: createMutate } = useCreate()
+  const { mutate: updateMutate } = useUpdate()
+  const { mutate: deleteMutate } = useDelete()
 
-  const useUpdateOrganizationMutation = useMutation({
-    resource: "organizations",
-    action: "update",
-  })
-
-  const useDeleteOrganizationMutation = useMutation({
-    resource: "organizations",
-    action: "delete",
-  })
-
-  const listResult = useList({
+  const {
+    data: listResult,
+    isLoading: listIsLoading,
+    isError: listIsError,
+  } = useList({
     resource: "organizations",
     pagination: {
       mode: "off",
@@ -45,8 +38,8 @@ export function useOrganizations() {
     filters?: any[]
     sorters?: any[]
   }) => {
-    const { current, pageSize } = listResult.pagination
-    const { sorters, filters } = listResult
+    const current = 1
+    const pageSize = 10
 
     const { data, isLoading, isError } = useList({
       resource: "organizations",
@@ -54,8 +47,8 @@ export function useOrganizations() {
         current: params?.page || current || 1,
         pageSize: params?.pageSize || pageSize || 10,
       },
-      filters: params?.filters || filters,
-      sorters: params?.sorters || sorters,
+      // filters: params?.filters || filters,
+      // sorters: params?.sorters || sorters,
     })
 
     return {
@@ -92,17 +85,16 @@ export function useOrganizations() {
   const createOrganization = async (organizationData: any) => {
     setIsLoading(true)
     try {
-      const { mutate } = useCreateOrganizationMutation
-
-      const response = await mutate({
+      const data = await createMutate({
+        resource: "organizations",
         values: organizationData,
       })
 
-      notification.success("Organization created successfully")
+      // notification.success("Organization created successfully")
       setIsLoading(false)
-      return response?.data
+      return data
     } catch (error: any) {
-      notification.error("Failed to create organization")
+      // notification.error("Failed to create organization")
       setIsLoading(false)
       throw error
     }
@@ -117,18 +109,17 @@ export function useOrganizations() {
   const updateOrganization = async (id: string, organizationData: any) => {
     setIsLoading(true)
     try {
-      const { mutate } = useUpdateOrganizationMutation
-
-      const response = await mutate({
+      const data = await updateMutate({
+        resource: "organizations",
         id,
         values: organizationData,
       })
 
-      notification.success("Organization updated successfully")
+      // notification.success("Organization updated successfully")
       setIsLoading(false)
-      return response?.data
+      return data
     } catch (error: any) {
-      notification.error("Failed to update organization")
+      // notification.error("Failed to update organization")
       setIsLoading(false)
       throw error
     }
@@ -142,16 +133,15 @@ export function useOrganizations() {
   const deleteOrganization = async (id: string) => {
     setIsLoading(true)
     try {
-      const { mutate } = useDeleteOrganizationMutation
-
-      await mutate({
+      await deleteMutate({
+        resource: "organizations",
         id,
       })
 
-      notification.success("Organization deleted successfully")
+      // notification.success("Organization deleted successfully")
       setIsLoading(false)
     } catch (error: any) {
-      notification.error("Failed to delete organization")
+      // notification.error("Failed to delete organization")
       setIsLoading(false)
       throw error
     }

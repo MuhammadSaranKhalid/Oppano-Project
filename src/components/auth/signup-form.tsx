@@ -1721,7 +1721,7 @@ import {
 
 import { signupSchema, type SignupFormValues } from "@/lib/validations/auth";
 import { supabaseBrowserClient } from "@/utils/supabase/client";
-import type { AccountStatus } from "@lib/auth";
+// import type { AccountStatus } from "@lib/auth";
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -1738,9 +1738,9 @@ export default function SignUpForm() {
     number: false,
     special: false,
   });
-  const [accountStatus, setAccountStatus] = useState<AccountStatus | null>(
-    null
-  );
+  // const [accountStatus, setAccountStatus] = useState<AccountStatus | null>(
+  //   null
+  // );
   const [isRateLimited, setIsRateLimited] = useState(false);
   const router = useRouter();
 
@@ -1766,11 +1766,11 @@ export default function SignUpForm() {
   const email = form.watch("email");
 
   // Reset account status when email changes
-  useEffect(() => {
-    if (accountStatus && email) {
-      setAccountStatus(null);
-    }
-  }, [email, accountStatus]);
+  // useEffect(() => {
+  //   // if (accountStatus && email) {
+  //   //   setAccountStatus(null);
+  //   // }
+  // }, [email, accountStatus]);
 
   // Reset rate limit error when form values change
   useEffect(() => {
@@ -1811,7 +1811,7 @@ export default function SignUpForm() {
   function onSubmit(values: SignupFormValues) {
     setError(null);
     setFieldErrors({});
-    setAccountStatus(null);
+    // setAccountStatus(null);
     setIsSuccess(false);
     setIsRateLimited(false);
 
@@ -1920,40 +1920,40 @@ export default function SignUpForm() {
 
   // Render account status alert based on verification status
   const renderAccountStatusAlert = () => {
-    if (!accountStatus?.exists) return null;
+    // if (!accountStatus?.exists) return null;
 
-    if (accountStatus.verified) {
-      return (
-        <Alert className="border-blue-500 bg-blue-50 text-blue-700 animate-in fade-in-50">
-          <Info className="h-4 w-4 text-blue-500" />
-          <AlertTitle>Account Already Exists</AlertTitle>
-          <AlertDescription className="flex flex-col gap-2">
-            <p>
-              An account with this email address already exists and has been
-              verified.
-            </p>
-            <div className="flex flex-wrap gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="border-blue-300 text-blue-700 hover:bg-blue-100"
-                onClick={() => router.push("/login")}
-              >
-                Log in instead
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="border-blue-300 text-blue-700 hover:bg-blue-100"
-                onClick={() => router.push("/forgot-password")}
-              >
-                Forgot password?
-              </Button>
-            </div>
-          </AlertDescription>
-        </Alert>
-      );
-    } else {
+    // if (accountStatus.verified) {
+    //   return (
+    //     <Alert className="border-blue-500 bg-blue-50 text-blue-700 animate-in fade-in-50">
+    //       <Info className="h-4 w-4 text-blue-500" />
+    //       <AlertTitle>Account Already Exists</AlertTitle>
+    //       <AlertDescription className="flex flex-col gap-2">
+    //         <p>
+    //           An account with this email address already exists and has been
+    //           verified.
+    //         </p>
+    //         <div className="flex flex-wrap gap-2">
+    //           <Button
+    //             variant="outline"
+    //             size="sm"
+    //             className="border-blue-300 text-blue-700 hover:bg-blue-100"
+    //             onClick={() => router.push("/login")}
+    //           >
+    //             Log in instead
+    //           </Button>
+    //           <Button
+    //             variant="outline"
+    //             size="sm"
+    //             className="border-blue-300 text-blue-700 hover:bg-blue-100"
+    //             onClick={() => router.push("/forgot-password")}
+    //           >
+    //             Forgot password?
+    //           </Button>
+    //         </div>
+    //       </AlertDescription>
+    //     </Alert>
+    //   );
+    // } else {
       return (
         <Alert className="border-amber-500 bg-amber-50 text-amber-700 animate-in fade-in-50">
           <Mail className="h-4 w-4 text-amber-500" />
@@ -1987,7 +1987,7 @@ export default function SignUpForm() {
           </AlertDescription>
         </Alert>
       );
-    }
+    // }
   };
 
   return (
@@ -2036,7 +2036,7 @@ export default function SignUpForm() {
               </Alert>
             )}
 
-            {isSuccess && !accountStatus?.exists && (
+            {/* {isSuccess && !accountStatus?.exists && (
               <Alert className="border-green-500 bg-green-50 text-green-700 animate-in fade-in-50">
                 <CheckCircle className="h-4 w-4 text-green-500" />
                 <AlertTitle>Account Created Successfully</AlertTitle>
@@ -2045,7 +2045,7 @@ export default function SignUpForm() {
                   need to verify your email before logging in.
                 </AlertDescription>
               </Alert>
-            )}
+            )} */}
 
             {renderAccountStatusAlert()}
 
@@ -2069,7 +2069,7 @@ export default function SignUpForm() {
                           disabled={
                             isLoading ||
                             isSuccess ||
-                            !!accountStatus?.exists ||
+                            // !!accountStatus?.exists ||
                             isRateLimited
                           }
                           className={`border-[#bbbbbb] focus-visible:ring-[#ff6a00] focus-visible:ring-offset-0 ${
@@ -2106,7 +2106,7 @@ export default function SignUpForm() {
                           {...field}
                           disabled={isLoading || isSuccess || isRateLimited}
                           className={`border-[#bbbbbb] focus-visible:ring-[#ff6a00] focus-visible:ring-offset-0 ${
-                            fieldErrors.email || accountStatus?.exists
+                            fieldErrors.email
                               ? "border-red-500 focus-visible:ring-red-500"
                               : ""
                           }`}
@@ -2222,7 +2222,7 @@ export default function SignUpForm() {
                             disabled={
                               isLoading ||
                               isSuccess ||
-                              !!accountStatus?.exists ||
+                              // !!accountStatus?.exists ||
                               isRateLimited
                             }
                             className={`border-[#bbbbbb] focus-visible:ring-[#ff6a00] focus-visible:ring-offset-0 pr-10 ${
@@ -2241,7 +2241,7 @@ export default function SignUpForm() {
                             disabled={
                               isLoading ||
                               isSuccess ||
-                              !!accountStatus?.exists ||
+                              // !!accountStatus?.exists ||
                               isRateLimited
                             }
                           >
@@ -2263,7 +2263,7 @@ export default function SignUpForm() {
                       ) : (
                         <FormMessage />
                       )}
-                      {password && !accountStatus?.exists && !isRateLimited && (
+                      {password  && !isRateLimited && (
                         <div className="mt-2 space-y-2">
                           <div className="flex items-center justify-between">
                             <span className="text-xs text-muted-foreground">
@@ -2342,7 +2342,7 @@ export default function SignUpForm() {
                             disabled={
                               isLoading ||
                               isSuccess ||
-                              !!accountStatus?.exists ||
+                              // !!accountStatus?.exists ||
                               isRateLimited
                             }
                             className={`border-[#bbbbbb] focus-visible:ring-[#ff6a00] focus-visible:ring-offset-0 pr-10 ${
@@ -2363,7 +2363,7 @@ export default function SignUpForm() {
                             disabled={
                               isLoading ||
                               isSuccess ||
-                              !!accountStatus?.exists ||
+                              // !!accountStatus?.exists ||
                               isRateLimited
                             }
                           >
@@ -2397,7 +2397,7 @@ export default function SignUpForm() {
                   disabled={
                     isLoading ||
                     isSuccess ||
-                    !!accountStatus?.exists ||
+                    // !!accountStatus?.exists ||
                     isRateLimited
                   }
                 >
@@ -2425,7 +2425,7 @@ export default function SignUpForm() {
                     isLoading ||
                     isSuccess ||
                     isGoogleLoading ||
-                    !!accountStatus?.exists ||
+                    // !!accountStatus?.exists ||
                     isRateLimited
                   }
                   onClick={handleGoogleSignUp}

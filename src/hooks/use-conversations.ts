@@ -2,7 +2,7 @@
 
 import { useList, useOne, useMutationMode, useCreate, useUpdate, useDelete } from "@refinedev/core"
 import { useState } from "react"
-import { useNotification } from "@/providers/notification-provider"
+// import { useNotification } from "@/providers/notification-provider"
 
 /**
  * Custom hook for managing conversations
@@ -10,8 +10,8 @@ import { useNotification } from "@/providers/notification-provider"
  */
 export function useConversations() {
   const [isLoading, setIsLoading] = useState(false)
-  const notification = useNotification()
-  const { mutationMode } = useMutationMode()
+  // const notification = useNotification()
+  // const { mutationMode } = useMutationMode()
 
   /**
    * Fetch a list of conversations with optional filtering and pagination
@@ -82,20 +82,20 @@ export function useConversations() {
       const data = await createMutate({
         resource: "conversations",
         values: conversationData,
-        mutationMode,
-        onSuccess: () => {
-          notification.success("Conversation created successfully")
-          refetch()
-        },
-        onError: () => {
-          notification.error("Failed to create conversation")
-        },
+        // mutationMode,
+        // onSuccess: () => {
+        //   // notification.success("Conversation created successfully")
+        //   refetch()
+        // },
+        // onError: () => {
+        //   // notification.error("Failed to create conversation")
+        // },
       })
 
       setIsLoading(false)
       return data
     } catch (error) {
-      notification.error("Failed to create conversation")
+      // notification.error("Failed to create conversation")
       setIsLoading(false)
       throw error
     }
@@ -116,21 +116,21 @@ export function useConversations() {
         resource: "conversations",
         id,
         values: conversationData,
-        mutationMode,
-        onSuccess: () => {
-          notification.success("Conversation updated successfully")
-          refetch()
-        },
-        onError: () => {
-          notification.error("Failed to update conversation")
-        },
+        // mutationMode,
+        // onSuccess: () => {
+        //   // notification.success("Conversation updated successfully")
+        //   refetch()
+        // },
+        // onError: () => {
+        //   // notification.error("Failed to update conversation")
+        // },
       })
 
-      notification.success("Conversation updated successfully")
+      // notification.success("Conversation updated successfully")
       setIsLoading(false)
       return data
     } catch (error) {
-      notification.error("Failed to update conversation")
+      // notification.error("Failed to update conversation")
       setIsLoading(false)
       throw error
     }
@@ -149,20 +149,20 @@ export function useConversations() {
       await deleteMutate({
         resource: "conversations",
         id,
-        mutationMode,
-        onSuccess: () => {
-          notification.success("Conversation deleted successfully")
-          refetch()
-        },
-        onError: () => {
-          notification.error("Failed to delete conversation")
-        },
+        // mutationMode,
+        // onSuccess: () => {
+        //   notification.success("Conversation deleted successfully")
+        //   refetch()
+        // },
+        // onError: () => {
+        //   notification.error("Failed to delete conversation")
+        // },
       })
 
-      notification.success("Conversation deleted successfully")
+      // notification.success("Conversation deleted successfully")
       setIsLoading(false)
     } catch (error) {
-      notification.error("Failed to delete conversation")
+      // notification.error("Failed to delete conversation")
       setIsLoading(false)
       throw error
     }

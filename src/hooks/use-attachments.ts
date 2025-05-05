@@ -1,6 +1,7 @@
 "use client"
 
-import { useList, useOne, useMutationMode, useNotification, useSupabase } from "@refinedev/core"
+import { useList, useOne } from "@refinedev/core"
+import { supabaseBrowserClient } from "@/utils/supabase/client"
 import { useState } from "react"
 
 /**
@@ -9,10 +10,9 @@ import { useState } from "react"
  */
 export function useAttachments() {
   const [isLoading, setIsLoading] = useState(false)
-  const notification = useNotification()
-  const supabase = useSupabase()
-  const { mutationMode } = useMutationMode()
-  const live = mutationMode === "live"
+  // const notification = useNotification()
+  // const { mutationMode } = useMutationMode()
+  // const live = mutationMode === "live"
 
   /**
    * Fetch a list of attachments with optional filtering and pagination
@@ -44,12 +44,12 @@ export function useAttachments() {
       },
       filters: attachmentFilters,
       sorters: params?.sorters,
-      queryOptions: {
-        enabled: !live,
-      },
-      liveOptions: {
-        enabled: live,
-      },
+      // queryOptions: {
+      //   enabled: !live,
+      // },
+      // liveOptions: {
+      //   enabled: live,
+      // },
     })
 
     return {
@@ -89,14 +89,14 @@ export function useAttachments() {
     try {
       // Upload the file to Supabase storage
       const fileName = `${Date.now()}_${file.name}`
-      const { data: fileData, error: uploadError } = await supabase.storage.from("attachments").upload(fileName, file)
+      const { data: fileData, error: uploadError } = await supabaseBrowserClient.storage.from("attachments").upload(fileName, file)
 
       if (uploadError) {
         throw uploadError
       }
 
       // Get the public URL for the uploaded file
-      const { data: urlData } = supabase.storage.from("attachments").getPublicUrl(fileName)
+      const { data: urlData } = supabaseBrowserClient.storage.from("attachments").getPublicUrl(fileName)
 
       // Create the attachment record
       const attachmentData = {
@@ -107,17 +107,17 @@ export function useAttachments() {
         messageId,
       }
 
-      const { error } = await supabase.from("attachments").insert(attachmentData)
+      const { error } = await supabaseBrowserClient.from("attachments").insert(attachmentData)
 
       if (error) {
         throw error
       }
 
-      notification.success("File uploaded successfully")
+      // notification.success("File uploaded successfully")
       setIsLoading(false)
       return attachmentData
     } catch (error: any) {
-      notification.error(error.message || "Failed to upload file")
+      // notification.error(error.message || "Failed to upload file")
       setIsLoading(false)
       throw error
     }
@@ -133,23 +133,23 @@ export function useAttachments() {
     setIsLoading(true)
     try {
       // Delete the file from storage
-      const { error: storageError } = await supabase.storage.from("attachments").remove([fileName])
+      const { error: storageError } = await supabaseBrowserClient.storage.from("attachments").remove([fileName])
 
       if (storageError) {
         throw storageError
       }
 
       // Delete the attachment record
-      const { error } = await supabase.from("attachments").delete().eq("id", id)
+      const { error } = await supabaseBrowserClient.from("attachments").delete().eq("id", id)
 
       if (error) {
         throw error
       }
 
-      notification.success("Attachment deleted successfully")
+      // notification.success("Attachment deleted successfully")
       setIsLoading(false)
     } catch (error: any) {
-      notification.error(error.message || "Failed to delete attachment")
+      // notification.error(error.message || "Failed to delete attachment")
       setIsLoading(false)
       throw error
     }
