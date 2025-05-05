@@ -2,14 +2,16 @@
 
 import { useState, useEffect, useRef } from "react"
 import { useList, useCreate, useDelete } from "@refinedev/core"
-import { useNotification } from "@/providers/notification-provider"
+// import { useNotification } from "@/providers/notification-provider"
 import { Spinner } from "@/components/ui/spinner"
 import { Button } from "@/components/ui/button"
 import { EnhancedMessageItem } from "./enhanced-message-item"
 import { EnhancedMessageForm } from "./enhanced-message-form"
-import { useSupabase } from "@/providers/supabase-provider"
-import { useSession } from "@/providers/supabase-provider"
+// import { useSupabase } from "@/providers/supabase-provider"
+// import { useSession } from "@/providers/supabase-provider"
 import { ArrowDown } from "lucide-react"
+import { supabaseBrowserClient } from "@utils/supabase/client"
+import { useSession } from "@supabase/auth-helpers-react"
 
 interface EnhancedMessageListProps {
   conversationId: string
@@ -31,8 +33,8 @@ export function EnhancedMessageList({ conversationId, conversationType }: Enhanc
   const [isScrolledUp, setIsScrolledUp] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
-  const notification = useNotification()
-  const supabase = useSupabase()
+  // const notification = useNotification()
+  // const supabase = useSupabase()
   const session = useSession()
   
   // Use Refine hooks for data operations
@@ -115,7 +117,7 @@ export function EnhancedMessageList({ conversationId, conversationType }: Enhanc
   // Set up real-time subscription for new messages
   useEffect(() => {
     // Subscribe to new messages
-    const subscription = supabase
+    const subscription = supabaseBrowserClient
       .channel(`messages-${conversationId}`)
       .on(
         "postgres_changes",
@@ -128,7 +130,7 @@ export function EnhancedMessageList({ conversationId, conversationType }: Enhanc
         async (payload) => {
           // Fetch the complete message with relations
           if (payload.eventType === "INSERT") {
-            const { data: newMessage } = await supabase
+            const { data: newMessage } = await supabaseBrowserClient
               .from("messages")
               .select(`
                 *,
@@ -145,7 +147,7 @@ export function EnhancedMessageList({ conversationId, conversationType }: Enhanc
               setMessages((prev) => [...prev, newMessage])
             }
           } else if (payload.eventType === "UPDATE") {
-            const { data: updatedMessage } = await supabase
+            const { data: updatedMessage } = await supabaseBrowserClient
               .from("messages")
               .select(`
                 *,
@@ -170,13 +172,13 @@ export function EnhancedMessageList({ conversationId, conversationType }: Enhanc
 
     // Cleanup subscription on unmount
     return () => {
-      supabase.removeChannel(subscription)
+      supabaseBrowserClient.removeChannel(subscription)
     }
-  }, [supabase, conversationId])
+  }, [supabaseBrowserClient, conversationId])
 
   // Subscribe to reactions
   useEffect(() => {
-    const subscription = supabase
+    const subscription = supabaseBrowserClient
       .channel(`reactions-${conversationId}`)
       .on(
         "postgres_changes",
@@ -188,10 +190,10 @@ export function EnhancedMessageList({ conversationId, conversationType }: Enhanc
         async (payload) => {
           if (payload.eventType === "INSERT" || payload.eventType === "DELETE") {
             // Refresh the message that has the reaction change
-            const messageId = payload.new?.messageId || payload.old?.messageId
+            const messageId = (payload.new as { messageId?: string })?.messageId || (payload.old as { messageId?: string })?.messageId
             
             if (messageId) {
-              const { data: updatedMessage } = await supabase
+              const { data: updatedMessage } = await supabaseBrowserClient
                 .from("messages")
                 .select(`
                   *,
@@ -214,9 +216,9 @@ export function EnhancedMessageList({ conversationId, conversationType }: Enhanc
       .subscribe()
 
     return () => {
-      supabase.removeChannel(subscription)
+      supabaseBrowserClient.removeChannel(subscription)
     }
-  }, [supabase, conversationId])
+  }, [supabaseBrowserClient, conversationId])
 
   // Scroll to bottom function
   const scrollToBottom = () => {
@@ -227,7 +229,7 @@ export function EnhancedMessageList({ conversationId, conversationType }: Enhanc
   // Handle adding a reaction
   const handleAddReaction = async (messageId: string, emoji: string) => {
     if (!session) {
-      notification.error("You must be logged in to react to messages")
+      // notification.error("You must be logged in to react to messages")
       return
     }
     
@@ -242,7 +244,7 @@ export function EnhancedMessageList({ conversationId, conversationType }: Enhanc
         }
       })
     } catch (error) {
-      notification.error("Failed to add reaction")
+      // notification.error("Failed to add reaction")
       console.error(error)
     }
   }
@@ -253,7 +255,7 @@ export function EnhancedMessageList({ conversationId, conversationType }: Enhanc
     
     try {
       // Find the reaction ID first
-      const { data: reaction } = await supabase
+      const { data: reaction } = await supabaseBrowserClient
         .from("reactions")
         .select("id")
         .eq("messageId", messageId)
@@ -268,7 +270,7 @@ export function EnhancedMessageList({ conversationId, conversationType }: Enhanc
         })
       }
     } catch (error) {
-      notification.error("Failed to remove reaction")
+      // notification.error("Failed to remove reaction")
       console.error(error)
     }
   }
@@ -320,11 +322,11 @@ export function EnhancedMessageList({ conversationId, conversationType }: Enhanc
       }
     }, {
       onSuccess: () => {
-        notification.success("Message forwarded successfully")
+        // notification.success("Message forwarded successfully")
         setForwardMessage(null)
       },
       onError: () => {
-        notification.error("Failed to forward message")
+        // notification.error("Failed to forward message")
       }
     })
   }
@@ -475,4 +477,8 @@ export function EnhancedMessageList({ conversationId, conversationType }: Enhanc
           editMessageId={editMessage?.id}
           initialContent={editMessage?.content}
           onSuccess={handleCancel}
-\
+        />
+      </div>
+    </div>
+  )
+}

@@ -20,13 +20,13 @@ export default function RootLayout({
   return (
     // <html lang="en">
     //   <body>
-        <div className="flex h-screen w-full overflow-hidden">
-          <IconSidebar />
-          <div className="flex flex-1 overflow-hidden">
-            <AppSidebar />
-            <main className="flex-1 overflow-auto bg-white">{children}</main>
-          </div>
-        </div>
+    <div className="flex h-screen w-full overflow-hidden">
+      <IconSidebar />
+      <div className="flex flex-1 overflow-hidden">
+        <AppSidebar />
+        <main className="flex-1 overflow-auto bg-white">{children}</main>
+      </div>
+    </div>
     //   </body>
     // </html>
   );

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useList } from "@refinedev/core"
-import { useNotification } from "@/providers/notification-provider"
+// import { useNotification } from "@/providers/notification-provider"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
@@ -18,7 +18,7 @@ import { useRouter } from "next/navigation"
 export function OrganizationList() {
   const [organizations, setOrganizations] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const notification = useNotification()
+  // const notification = useNotification()
   const router = useRouter()
 
   // Fetch organizations using Refine's useList hook
@@ -56,9 +56,9 @@ export function OrganizationList() {
 
       // Update the local state
       setOrganizations(organizations.filter((org) => org.id !== id))
-      notification.success("Organization deleted successfully")
+      // notification.success("Organization deleted successfully")
     } catch (error) {
-      notification.error("Failed to delete organization")
+      // notification.error("Failed to delete organization")
       console.error(error)
     }
   }

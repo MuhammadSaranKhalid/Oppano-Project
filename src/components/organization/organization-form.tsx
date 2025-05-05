@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import { useNotification } from "@/providers/notification-provider"
+// import { useNotification } from "@/providers/notification-provider"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -31,7 +31,7 @@ type OrganizationFormProps = {
  */
 export function OrganizationForm({ initialData, isEditing = false }: OrganizationFormProps) {
   const [isLoading, setIsLoading] = useState(false)
-  const notification = useNotification()
+  // const notification = useNotification()
   const router = useRouter()
 
   // Initialize the form with react-hook-form and zod validation
@@ -62,11 +62,11 @@ export function OrganizationForm({ initialData, isEditing = false }: Organizatio
           },
           {
             onSuccess: () => {
-              notification.success("Organization updated successfully")
+              // notification.success("Organization updated successfully")
               router.push("/dashboard/organizations")
             },
             onError: (error) => {
-              notification.error("Failed to update organization")
+              // notification.error("Failed to update organization")
               console.error(error)
             },
           },
@@ -80,18 +80,18 @@ export function OrganizationForm({ initialData, isEditing = false }: Organizatio
           },
           {
             onSuccess: () => {
-              notification.success("Organization created successfully")
+              // notification.success("Organization created successfully")
               router.push("/dashboard/organizations")
             },
             onError: (error) => {
-              notification.error("Failed to create organization")
+              // notification.error("Failed to create organization")
               console.error(error)
             },
           },
         )
       }
     } catch (error) {
-      notification.error("An error occurred")
+      // notification.error("An error occurred")
       console.error(error)
     } finally {
       setIsLoading(false)

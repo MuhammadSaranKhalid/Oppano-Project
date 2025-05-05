@@ -6,17 +6,18 @@ import { useState, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import { useNotification } from "@/providers/notification-provider"
+// import { useNotification } from "@/providers/notification-provider"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form"
 import { useCreate, useUpdate } from "@refinedev/core"
 import { Paperclip, Send, X, ImageIcon, FileText, Mic, Video } from "lucide-react"
-import { useSupabase } from "@/providers/supabase-provider"
-import { useSession } from "@/providers/supabase-provider"
+// import { useSupabase } from "@/providers/supabase-provider"
+// import { useSession } from "@/providers/supabase-provider"
 import { Progress } from "@/components/ui/progress"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
+import { supabaseBrowserClient } from "@utils/supabase/client"
 
 // Define the form schema using zod
 const formSchema = z.object({
@@ -61,9 +62,9 @@ export function EnhancedMessageForm({
   const imageInputRef = useRef<HTMLInputElement>(null)
   const videoInputRef = useRef<HTMLInputElement>(null)
   const audioInputRef = useRef<HTMLInputElement>(null)
-  const notification = useNotification()
-  const supabase = useSupabase()
-  const session = useSession()
+  // const notification = useNotification()
+  // const supabase = useSupabase()
+  // const session = useSession()
 
   // Initialize the form with react-hook-form and zod validation
   const form = useForm<z.infer<typeof formSchema>>({
@@ -155,19 +156,19 @@ export function EnhancedMessageForm({
         const filePath = `messages/${fileName}`
 
         // Upload file to Supabase Storage
-        const { data: uploadData, error: uploadError } = await supabase.storage
+        const { data: uploadData, error: uploadError } = await supabaseBrowserClient.storage
           .from("attachments")
           .upload(filePath, file, {
             cacheControl: "3600",
             upsert: false,
-            onUploadProgress: (progress) => {
-              const percent = Math.round((progress.loaded / progress.total) * 100)
-              setFileUploads((prev) => {
-                const newUploads = [...prev]
-                newUploads[index] = { ...newUploads[index], progress: percent }
-                return newUploads
-              })
-            },
+            // onUploadProgress: (progress) => {
+            //   const percent = Math.round((progress.loaded / progress.total) * 100)
+            //   setFileUploads((prev) => {
+            //     const newUploads = [...prev]
+            //     newUploads[index] = { ...newUploads[index], progress: percent }
+            //     return newUploads
+            //   })
+            // },
           })
 
         if (uploadError) {
@@ -175,10 +176,10 @@ export function EnhancedMessageForm({
         }
 
         // Get public URL
-        const { data: publicUrlData } = supabase.storage.from("attachments").getPublicUrl(filePath)
+        const { data: publicUrlData } = supabaseBrowserClient.storage.from("attachments").getPublicUrl(filePath)
 
         // Create attachment record in database
-        const { data: attachmentData, error: attachmentError } = await supabase
+        const { data: attachmentData, error: attachmentError } = await supabaseBrowserClient
           .from("attachments")
           .insert({
             messageId,
@@ -221,7 +222,7 @@ export function EnhancedMessageForm({
           return newUploads
         })
 
-        notification.error(`Failed to upload ${fileUpload.file.name}`)
+        // notification.error(`Failed to upload ${fileUpload.file.name}`)
         return null
       }
     })
@@ -231,14 +232,14 @@ export function EnhancedMessageForm({
 
   // Handle form submission
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (!session) {
-      notification.error("You must be logged in to send messages")
-      return
-    }
+    // if (!session) {
+    //   // notification.error("You must be logged in to send messages")
+    //   return
+    // }
 
     // Validate that either content or files are provided
     if (!values.content && fileUploads.length === 0 && !forwardedMessageId) {
-      notification.error("Please enter a message or attach a file")
+      // notification.error("Please enter a message or attach a file")
       return
     }
 
@@ -266,24 +267,24 @@ export function EnhancedMessageForm({
               form.reset({ content: "" })
               setFileUploads([])
               if (onSuccess) onSuccess()
-              notification.success("Message updated successfully")
+              // notification.success("Message updated successfully")
             },
             onError: (error) => {
-              notification.error("Failed to update message")
+              // notification.error("Failed to update message")
               console.error(error)
             },
           },
         )
       } else if (forwardedMessageId) {
         // Forward an existing message to this conversation
-        const { data: originalMessage, error } = await supabase
+        const { data: originalMessage, error } = await supabaseBrowserClient
           .from("messages")
           .select("*, user:userId(*), attachments(*)")
           .eq("id", forwardedMessageId)
           .single()
 
         if (error || !originalMessage) {
-          notification.error("Failed to forward message")
+          // notification.error("Failed to forward message")
           setIsLoading(false)
           return
         }
@@ -299,7 +300,7 @@ export function EnhancedMessageForm({
             values: {
               content: forwardedContent,
               conversationId,
-              userId: session.user.id,
+              userId: "session.user.id",
               forwardedFromId: forwardedMessageId,
               createdAt: new Date().toISOString(),
             },
@@ -312,7 +313,7 @@ export function EnhancedMessageForm({
               if (originalMessage.attachments && originalMessage.attachments.length > 0 && newMessageId) {
                 const attachmentPromises = originalMessage.attachments.map(async (attachment: any) => {
                   // Create new attachment record linking to same file
-                  await supabase.from("attachments").insert({
+                  await supabaseBrowserClient.from("attachments").insert({
                     messageId: newMessageId,
                     name: attachment.name,
                     size: attachment.size,
@@ -327,10 +328,10 @@ export function EnhancedMessageForm({
 
               form.reset({ content: "" })
               if (onSuccess) onSuccess()
-              notification.success("Message forwarded successfully")
+              // notification.success("Message forwarded successfully")
             },
             onError: (error) => {
-              notification.error("Failed to forward message")
+              // notification.error("Failed to forward message")
               console.error(error)
             },
           },
@@ -343,7 +344,7 @@ export function EnhancedMessageForm({
             values: {
               content: values.content || "",
               conversationId,
-              userId: session.user.id,
+              userId: "session.user.id",
               replyToId: replyToId || null,
               createdAt: new Date().toISOString(),
             },
@@ -354,23 +355,23 @@ export function EnhancedMessageForm({
 
               // Upload files if there are any
               if (fileUploads.length > 0 && messageId) {
-                await uploadFiles(messageId)
+                await uploadFiles(messageId as string)
               }
 
               form.reset({ content: "" })
               setFileUploads([])
               if (onSuccess) onSuccess()
-              notification.success("Message sent successfully")
+              // notification.success("Message sent successfully")
             },
             onError: (error) => {
-              notification.error("Failed to send message")
+              // notification.error("Failed to send message")
               console.error(error)
             },
           },
         )
       }
     } catch (error) {
-      notification.error("An error occurred")
+      // notification.error("An error occurred")
       console.error(error)
     } finally {
       setIsLoading(false)

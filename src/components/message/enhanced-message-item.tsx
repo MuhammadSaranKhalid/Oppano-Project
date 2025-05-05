@@ -7,15 +7,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
-import { MessageReactions } from "./message-reactions"
+// import { MessageReactions } from "./message-reactions"
 import { StatusIndicator } from "@/components/ui/status-indicator"
-import { useNotification } from "@/providers/notification-provider"
+// import { useNotification } from "@/providers/notification-provider"
 import { useDelete } from "@refinedev/core"
 import { formatMessageTime } from "@/lib/utils"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { useSupabase } from "@/providers/supabase-provider"
-import { useSession } from "@/providers/supabase-provider"
+// import { useSupabase } from "@/providers/supabase-provider"
+// import { useSession } from "@/providers/supabase-provider"
+import { UserStatus } from "@/types"
 
 // Define the Reaction type
 export type Reaction = {
@@ -47,7 +48,7 @@ export interface EnhancedMessageProps {
     id: string
     name: string
     avatar?: string
-    status?: string
+    status?: UserStatus
   }
   isCurrentUser: boolean
   attachments?: Attachment[]
@@ -99,20 +100,20 @@ export function EnhancedMessageItem({
 }: EnhancedMessageProps) {
   const [showActions, setShowActions] = useState(false)
   const [isForwardDialogOpen, setIsForwardDialogOpen] = useState(false)
-  const notification = useNotification()
+  // const notification = useNotification()
   const router = useRouter()
-  const supabase = useSupabase()
-  const session = useSession()
+  // const supabase = useSupabase()
+  // const session = useSession()
 
   // Use Refine's useDelete hook for message deletion
   const { mutate: deleteMutation } = useDelete()
 
   // Handle adding a reaction
   const handleAddReaction = (messageId: string, emoji: string) => {
-    if (!session) {
-      notification.error("You must be logged in to react to messages")
-      return
-    }
+    // if (!session) {
+    //   notification.error("You must be logged in to react to messages")
+    //   return
+    // }
 
     onReactionAdd?.(messageId, emoji)
   }
@@ -140,10 +141,10 @@ export function EnhancedMessageItem({
 
   // Handle delete message
   const handleDelete = async () => {
-    if (!isCurrentUser && !session?.user?.role?.includes("admin")) {
-      notification.error("You can only delete your own messages")
-      return
-    }
+    // if (!isCurrentUser && !session?.user?.role?.includes("admin")) {
+    //   notification.error("You can only delete your own messages")
+    //   return
+    // }
 
     try {
       await deleteMutation({
@@ -151,9 +152,9 @@ export function EnhancedMessageItem({
         id,
       })
 
-      notification.success("Message deleted successfully")
+      // notification.success("Message deleted successfully")
     } catch (error) {
-      notification.error("Failed to delete message")
+      // notification.error("Failed to delete message")
       console.error(error)
     }
   }
@@ -434,12 +435,12 @@ export function EnhancedMessageItem({
                       Edit message
                     </DropdownMenuItem>
                   )}
-                  {(isCurrentUser || session?.user?.role?.includes("admin")) && (
+                  {/* {(isCurrentUser || session?.user?.role?.includes("admin")) && (
                     <DropdownMenuItem onClick={handleDelete} className="text-red-500">
                       <Trash className="h-3.5 w-3.5 mr-2" />
                       Delete message
                     </DropdownMenuItem>
-                  )}
+                  )} */}
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -461,7 +462,7 @@ export function EnhancedMessageItem({
         )}
 
         {/* Reactions */}
-        {reactions && reactions.length > 0 && (
+        {/* {reactions && reactions.length > 0 && (
           <MessageReactions
             reactions={reactions}
             messageId={id}
@@ -469,7 +470,7 @@ export function EnhancedMessageItem({
             onRemoveReaction={handleRemoveReaction}
             currentUserId={session?.user?.id || ""}
           />
-        )}
+        )} */}
       </div>
     </div>
   )

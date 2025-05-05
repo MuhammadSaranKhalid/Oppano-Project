@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useList } from "@refinedev/core"
-import { useSupabase } from "@/providers/supabase-provider"
+// import { useSupabase } from "@/providers/supabase-provider"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -14,7 +14,7 @@ import { OrganizationSwitcher } from "@/components/organization/organization-swi
 
 export function Sidebar() {
   const pathname = usePathname()
-  const { session } = useSupabase()
+  // const { session } = useSupabase()
   const [activeOrg, setActiveOrg] = useState<string | null>(null)
 
   // Fetch user's organizations using Refine's useList hook
@@ -24,7 +24,7 @@ export function Sidebar() {
       {
         field: "userId",
         operator: "eq",
-        value: session?.user?.id,
+        value: "session?.user?.id",
       },
     ],
     pagination: {

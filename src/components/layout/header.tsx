@@ -1,6 +1,6 @@
 "use client"
 
-import { useSupabase } from "@/providers/supabase-provider"
+// import { useSupabase } from "@/providers/supabase-provider"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -13,30 +13,31 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useRouter } from "next/navigation"
 import { ModeToggle } from "@/components/ui/mode-toggle"
+import { supabaseBrowserClient } from "@utils/supabase/client"
 
 export function Header() {
-  const { supabase, session } = useSupabase()
+  // const { supabase, session } = useSupabase()
   const router = useRouter()
 
   // Handle user logout
   const handleLogout = async () => {
-    await supabase.auth.signOut()
+    await supabaseBrowserClient.auth.signOut()
     router.push("/auth/login")
   }
 
   // Get user initials for avatar fallback
-  const getUserInitials = () => {
-    if (!session?.user?.email) return "U"
+  // const getUserInitials = () => {
+  //   // if (!session?.user?.email) return "U"
 
-    const email = session.user.email
-    const parts = email.split("@")[0].split(".")
+  //   const email = session.user.email
+  //   const parts = email.split("@")[0].split(".")
 
-    if (parts.length >= 2) {
-      return (parts[0][0] + parts[1][0]).toUpperCase()
-    }
+  //   if (parts.length >= 2) {
+  //     return (parts[0][0] + parts[1][0]).toUpperCase()
+  //   }
 
-    return email.substring(0, 2).toUpperCase()
-  }
+  //   return email.substring(0, 2).toUpperCase()
+  // }
 
   return (
     <header className="border-b bg-background">
@@ -50,7 +51,7 @@ export function Header() {
           <ModeToggle />
 
           {/* User menu */}
-          {session?.user && (
+          {/* {session?.user && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
@@ -76,7 +77,7 @@ export function Header() {
                 <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          )}
+          )} */}
         </div>
       </div>
     </header>

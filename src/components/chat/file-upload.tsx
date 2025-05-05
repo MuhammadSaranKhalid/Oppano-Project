@@ -79,7 +79,7 @@ export function FileUpload({
         // Get the file path (for folder uploads)
         // @ts-ignore - webkitRelativePath exists on files from directory input
         const relativePath =
-          file.webkitRelativePath || file.relativePath || file.name;
+          file.webkitRelativePath || file.name;
         const pathParts = relativePath.split("/");
 
         // Create a unique ID for this file
@@ -263,19 +263,19 @@ export function FileUpload({
           await supabase.storage.from("files").upload(storagePath, rawFile, {
             cacheControl: "3600",
             upsert: false,
-            onUploadProgress: (progress) => {
-              const percent = Math.round(
-                (progress.loaded / progress.total) * 100
-              );
-              setFiles((prevFiles) => {
-                return prevFiles.map((f) => {
-                  if (f.id === fileObj.id) {
-                    return { ...f, progress: percent };
-                  }
-                  return f;
-                });
-              });
-            },
+            // onUploadProgress: (progress) => {
+            //   const percent = Math.round(
+            //     (progress.loaded / progress.total) * 100
+            //   );
+            //   setFiles((prevFiles) => {
+            //     return prevFiles.map((f) => {
+            //       if (f.id === fileObj.id) {
+            //         return { ...f, progress: percent };
+            //       }
+            //       return f;
+            //     });
+            //   });
+            // },
           });
 
         if (storageError) throw storageError;

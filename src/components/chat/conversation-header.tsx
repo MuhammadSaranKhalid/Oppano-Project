@@ -190,7 +190,7 @@ export const ConversationHeader = ({
   loading,
   currentUserId,
 }: ConversationHeaderProps) => {
-  const { show } = useNotification();
+  // const { show } = useNotification();
   const { mutate: deleteConversation } = useDelete();
   const { edit, list } = useNavigation();
 
@@ -261,18 +261,18 @@ export const ConversationHeader = ({
       },
       {
         onSuccess: () => {
-          show({
-            type: "success",
-            message: "Conversation deleted successfully",
-          });
-          list({ resource: "conversations" });
+          // show({
+          //   type: "success",
+          //   message: "Conversation deleted successfully",
+          // });
+          // list({ resource: "conversations" });
         },
         onError: (error) => {
-          show({
-            type: "error",
-            message: "Failed to delete conversation",
-            description: error?.message,
-          });
+          // show({
+          //   type: "error",
+          //   message: "Failed to delete conversation",
+          //   description: error?.message,
+          // });
         },
       }
     );
@@ -280,11 +280,11 @@ export const ConversationHeader = ({
 
   // Handle adding participants
   const handleAddParticipants = () => {
-    edit({
-      resource: "conversations",
-      id: conversation.id,
-      action: "edit",
-    });
+    // edit({
+    //   resource: "conversations",
+    //   id: conversation.id,
+    //   action: "edit",
+    // });
   };
 
   return (

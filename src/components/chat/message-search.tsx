@@ -46,7 +46,7 @@ export function MessageSearch({ isOpen, onClose, conversationId }: MessageSearch
   const [showFilters, setShowFilters] = useState(false)
   const [showDatePicker, setShowDatePicker] = useState(false)
   const [showUserFilter, setShowUserFilter] = useState(false)
-  const [dateRange, setDateRange] = useState<{ from: Date | undefined; to: Date | undefined }>({
+  const [dateRange, setDateRange] = useState<{ from: Date | undefined; to?: Date | undefined }>({
     from: undefined,
     to: undefined,
   })
@@ -749,7 +749,7 @@ export function MessageSearch({ isOpen, onClose, conversationId }: MessageSearch
         <div className="flex-1 overflow-y-auto p-4" ref={resultsContainerRef}>
           {isSearching ? (
             <div className="flex flex-col items-center justify-center h-40">
-              <Spinner size={32} />
+              <Spinner size="lg" />
               <p className="mt-4 text-sm text-gray-500">Searching messages...</p>
             </div>
           ) : results.length > 0 ? (

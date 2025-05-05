@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useList } from "@refinedev/core"
-import { useNotification } from "@/providers/notification-provider"
+// import { useNotification } from "@/providers/notification-provider"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
@@ -19,7 +19,7 @@ import { Badge } from "@/components/ui/badge"
 export function ConversationList() {
   const [conversations, setConversations] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const notification = useNotification()
+  // const notification = useNotification()
   const router = useRouter()
 
   // Fetch conversations using Refine's useList hook
@@ -61,9 +61,9 @@ export function ConversationList() {
 
       // Update the local state
       setConversations(conversations.filter((conv) => conv.id !== id))
-      notification.success("Conversation deleted successfully")
+      // notification.success("Conversation deleted successfully")
     } catch (error) {
-      notification.error("Failed to delete conversation")
+      // notification.error("Failed to delete conversation")
       console.error(error)
     }
   }

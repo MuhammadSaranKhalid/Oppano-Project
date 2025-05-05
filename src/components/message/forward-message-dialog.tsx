@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { useList } from "@refinedev/core"
-import { useNotification } from "@/providers/notification-provider"
+// import { useNotification } from "@/providers/notification-provider"
 import { Spinner } from "@/components/ui/spinner"
 import { Check, Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
@@ -26,7 +26,7 @@ interface ForwardMessageDialogProps {
 export function ForwardMessageDialog({ isOpen, onClose, onForward, currentConversationId }: ForwardMessageDialogProps) {
   const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
-  const notification = useNotification()
+  // const notification = useNotification()
 
   // Fetch conversations using Refine's useList hook
   const { data, isLoading, isError } = useList({
@@ -78,7 +78,7 @@ export function ForwardMessageDialog({ isOpen, onClose, onForward, currentConver
   // Handle forward action
   const handleForward = () => {
     if (!selectedConversationId) {
-      notification.error("Please select a conversation")
+      // notification.error("Please select a conversation")
       return
     }
 
@@ -145,9 +145,9 @@ export function ForwardMessageDialog({ isOpen, onClose, onForward, currentConver
                     key={conversation.id}
                     className={cn(
                       "flex items-center gap-3 rounded-md px-3 py-2 cursor-pointer",
-                      selectedConversationId === conversation.id ? "bg-gray-100" : "hover:bg-gray-50",
+                      selectedConversationId === String(conversation.id) ? "bg-gray-100" : "hover:bg-gray-50",
                     )}
-                    onClick={() => setSelectedConversationId(conversation.id)}
+                    onClick={() => setSelectedConversationId(String(conversation.id))}
                   >
                     <Avatar className="h-8 w-8">
                       <AvatarImage
@@ -166,7 +166,7 @@ export function ForwardMessageDialog({ isOpen, onClose, onForward, currentConver
                             : "Direct Message"}
                       </p>
                     </div>
-                    {selectedConversationId === conversation.id && <Check className="h-4 w-4 text-green-500" />}
+                    {selectedConversationId === String(conversation.id) && <Check className="h-4 w-4 text-green-500" />}
                   </div>
                 ))}
               </div>

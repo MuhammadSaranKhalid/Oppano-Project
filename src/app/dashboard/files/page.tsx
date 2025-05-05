@@ -77,7 +77,7 @@ export default function FilesPage() {
     },
   });
 
-  const handleUploadComplete = async (files) => {
+  const handleUploadComplete = async (files: any) => {
     toast({
       title: "Upload Complete",
       description: `Successfully uploaded ${files.length} file(s)`,
@@ -121,30 +121,30 @@ export default function FilesPage() {
         </TabsList>
         <TabsContent value="all" className="mt-6">
           <DocumentsTable
-            documents={data?.data || []}
-            isLoading={isLoading}
-            onRefresh={refetch}
+            // documents={data?.data || []}
+            // isLoading={isLoading}
+            // onRefresh={refetch}
           />
         </TabsContent>
         <TabsContent value="recent" className="mt-6">
           <DocumentsTable
-            documents={(data?.data || []).slice(0, 10)}
-            isLoading={isLoading}
-            onRefresh={refetch}
+            // documents={(data?.data || []).slice(0, 10)}
+            // isLoading={isLoading}
+            // onRefresh={refetch}
           />
         </TabsContent>
         <TabsContent value="shared" className="mt-6">
           <DocumentsTable
-            documents={[]}
-            isLoading={isLoading}
-            onRefresh={refetch}
+            // documents={[]}
+            // isLoading={isLoading}
+            // onRefresh={refetch}
           />
         </TabsContent>
         <TabsContent value="archived" className="mt-6">
           <DocumentsTable
-            documents={data?.data || []}
-            isLoading={isLoading}
-            onRefresh={refetch}
+            // documents={data?.data || []}
+            // isLoading={isLoading}
+            // onRefresh={refetch}
           />
         </TabsContent>
       </Tabs>

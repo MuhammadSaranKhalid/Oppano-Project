@@ -127,7 +127,7 @@ export function CreateDirectMessageModal({ isOpen, onClose }: CreateDirectMessag
           <ScrollArea className="h-[300px] pr-4">
             {isLoading ? (
               <div className="flex items-center justify-center h-full">
-                <Spinner size={24} />
+                <Spinner size={"md"} />
               </div>
             ) : filteredUsers.length === 0 ? (
               <div className="text-center py-8 text-gray-500">No users found</div>
@@ -161,7 +161,7 @@ export function CreateDirectMessageModal({ isOpen, onClose }: CreateDirectMessag
               Cancel
             </Button>
             <Button onClick={handleStartConversation} disabled={selectedUsers.length === 0 || isSubmitting}>
-              {isSubmitting ? <Spinner size={16} className="mr-2" /> : null}
+              {isSubmitting ? <Spinner size={"md"} className="mr-2" /> : null}
               {selectedUsers.length > 1 ? "Create Group" : "Start Conversation"}
             </Button>
           </div>

@@ -44,7 +44,7 @@ const ChannelSection = memo(function ChannelSection({
         <div className="mt-1 space-y-0 pl-6 pr-3">
           {isLoading ? (
             <div className="flex items-center justify-center h-40">
-              <Spinner size={32} />
+              <Spinner size={"sm"} />
             </div>
           ) : channels.length > 0 ? (
             channels.map((channel) => {

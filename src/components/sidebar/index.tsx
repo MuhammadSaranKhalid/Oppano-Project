@@ -42,19 +42,19 @@ export function AppSidebar() {
 
   // Determine active section based on pathname
   useEffect(() => {
-    if (pathname.startsWith("/replies")) {
+    if (pathname.startsWith("/dashboard/replies")) {
       setActiveSection("replies")
-    } else if (pathname.startsWith("/activity")) {
+    } else if (pathname.startsWith("/dashboard/activity")) {
       setActiveSection("activity")
-    } else if (pathname.startsWith("/drafts")) {
+    } else if (pathname.startsWith("/dashboard/drafts")) {
       setActiveSection("drafts")
-    } else if (pathname.startsWith("/time")) {
+    } else if (pathname.startsWith("/dashboard/time")) {
       setActiveSection("time")
-    } else if (pathname.startsWith("/files")) {
+    } else if (pathname.startsWith("/dashboard/files")) {
       setActiveSection("files")
-    } else if (pathname.startsWith("/settings")) {
+    } else if (pathname.startsWith("/dashboard/settings")) {
       setActiveSection("settings")
-    } else if (pathname.startsWith("/more")) {
+    } else if (pathname.startsWith("/dashboard/more")) {
       setActiveSection("more")
     }
   }, [pathname, setActiveSection])
@@ -67,7 +67,7 @@ export function AppSidebar() {
   useEffect(() => {
     const handleResize = () => {
       const isMobile = window.innerWidth < 768
-      if (isMobile && pathname.startsWith("/time")) {
+      if (isMobile && pathname.startsWith("/dashboard/time")) {
         document.body.classList.add("sidebar-collapsed")
       } else {
         document.body.classList.remove("sidebar-collapsed")

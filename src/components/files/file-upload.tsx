@@ -229,7 +229,7 @@ export function FileUpload({ onUploadComplete }: FileUploadProps) {
                 if (f.id === file.id) {
                   return {
                     ...f,
-                    status: isSuccess ? "success" : "error",
+                    status: isSuccess ? "success" as const : "error" as const,
                     progress: 100,
                     error: isSuccess ? undefined : "Upload failed. Please try again.",
                   }
@@ -263,7 +263,16 @@ export function FileUpload({ onUploadComplete }: FileUploadProps) {
             }, 500)
           } else {
             setFiles((prevFiles) => {
-              const updatedFiles = prevFiles.map((f) => (f.id === file.id ? { ...f, progress } : f))
+              const updatedFiles = prevFiles.map((f) => {
+                if (f.id === file.id) {
+                  return {
+                    ...f,
+                    progress,
+                    status: "uploading" as const
+                  }
+                }
+                return f
+              })
               return updateFolderProgress(updatedFiles)
             })
           }
@@ -317,7 +326,8 @@ export function FileUpload({ onUploadComplete }: FileUploadProps) {
       })
     }
 
-    return Array.from(fileMap.values())
+    // Ensure all files in the result are properly typed as UploadedFile
+    return Array.from(fileMap.values()) as UploadedFile[]
   }
 
   const removeFile = useCallback((fileId: string) => {

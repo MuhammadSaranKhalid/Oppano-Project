@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import { useNotification } from "@/providers/notification-provider"
+// import { useNotification } from "@/providers/notification-provider"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -39,7 +39,7 @@ export function ConversationForm({ initialData, isEditing = false }: Conversatio
   const [isLoading, setIsLoading] = useState(false)
   const [organizations, setOrganizations] = useState<any[]>([])
   const [users, setUsers] = useState<any[]>([])
-  const notification = useNotification()
+  // const notification = useNotification()
   const router = useRouter()
 
   // Fetch organizations for the dropdown
@@ -93,11 +93,11 @@ export function ConversationForm({ initialData, isEditing = false }: Conversatio
           },
           {
             onSuccess: () => {
-              notification.success("Conversation updated successfully")
+              // notification.success("Conversation updated successfully")
               router.push("/dashboard/conversations")
             },
             onError: (error) => {
-              notification.error("Failed to update conversation")
+              // notification.error("Failed to update conversation")
               console.error(error)
             },
           },
@@ -111,18 +111,18 @@ export function ConversationForm({ initialData, isEditing = false }: Conversatio
           },
           {
             onSuccess: () => {
-              notification.success("Conversation created successfully")
+              // notification.success("Conversation created successfully")
               router.push("/dashboard/conversations")
             },
             onError: (error) => {
-              notification.error("Failed to create conversation")
+              // notification.error("Failed to create conversation")
               console.error(error)
             },
           },
         )
       }
     } catch (error) {
-      notification.error("An error occurred")
+      // notification.error("An error occurred")
       console.error(error)
     } finally {
       setIsLoading(false)

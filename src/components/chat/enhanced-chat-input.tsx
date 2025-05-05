@@ -185,7 +185,7 @@ export function EnhancedChatInput({ conversationId, onSendMessage }: EnhancedCha
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80 p-0" align="end">
-              <EmojiPicker onEmojiSelect={handleEmojiSelect} />
+              <EmojiPicker onSelect={handleEmojiSelect} />
             </PopoverContent>
           </Popover>
 
@@ -200,7 +200,7 @@ export function EnhancedChatInput({ conversationId, onSendMessage }: EnhancedCha
           </Button>
 
           <Button
-            variant="primary"
+            // variant="primary"
             size="icon"
             className="h-8 w-8 rounded-full bg-gray-900 text-white hover:bg-gray-700"
             onClick={handleSendMessage}

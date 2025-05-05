@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { useList } from "@refinedev/core"
-import { useNotification } from "@/providers/notification-provider"
+// import { useNotification } from "@/providers/notification-provider"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
@@ -11,7 +11,8 @@ import { Trash, Reply, Edit, FileText, ImageIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { MessageForm } from "@/components/message/message-form"
-import { useSupabase } from "@/providers/supabase-provider"
+import { supabaseBrowserClient } from "@utils/supabase/client"
+// import { useSupabase } from "@/providers/supabase-provider"
 
 type MessageListProps = {
   conversationId: string
@@ -27,9 +28,9 @@ export function MessageList({ conversationId }: MessageListProps) {
   const [replyTo, setReplyTo] = useState<any>(null)
   const [editMessage, setEditMessage] = useState<any>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  const notification = useNotification()
+  // const notification = useNotification()
   const router = useRouter()
-  const supabase = useSupabase()
+  // const supabase = useSupabase()
 
   // Fetch messages using Refine's useList hook
   const {
@@ -77,7 +78,7 @@ export function MessageList({ conversationId }: MessageListProps) {
   // Set up real-time subscription for new messages
   useEffect(() => {
     // Subscribe to new messages
-    const subscription = supabase
+    const subscription = supabaseBrowserClient
       .channel("messages")
       .on(
         "postgres_changes",
@@ -90,7 +91,7 @@ export function MessageList({ conversationId }: MessageListProps) {
         async (payload) => {
           // Fetch the complete message with relations
           if (payload.eventType === "INSERT") {
-            const { data: newMessage } = await supabase
+            const { data: newMessage } = await supabaseBrowserClient
               .from("messages")
               .select("*, user:userId(*), attachments(*), replyTo:replyToId(*)")
               .eq("id", payload.new.id)
@@ -100,7 +101,7 @@ export function MessageList({ conversationId }: MessageListProps) {
               setMessages((prev) => [...prev, newMessage])
             }
           } else if (payload.eventType === "UPDATE") {
-            const { data: updatedMessage } = await supabase
+            const { data: updatedMessage } = await supabaseBrowserClient
               .from("messages")
               .select("*, user:userId(*), attachments(*), replyTo:replyToId(*)")
               .eq("id", payload.new.id)
@@ -118,9 +119,9 @@ export function MessageList({ conversationId }: MessageListProps) {
 
     // Cleanup subscription on unmount
     return () => {
-      supabase.removeChannel(subscription)
+      supabaseBrowserClient.removeChannel(subscription)
     }
-  }, [supabase, conversationId])
+  }, [supabaseBrowserClient, conversationId])
 
   // Handle message deletion
   const handleDelete = async (id: string) => {
@@ -133,9 +134,9 @@ export function MessageList({ conversationId }: MessageListProps) {
         throw new Error("Failed to delete message")
       }
 
-      notification.success("Message deleted successfully")
+      // notification.success("Message deleted successfully")
     } catch (error) {
-      notification.error("Failed to delete message")
+      // notification.error("Failed to delete message")
       console.error(error)
     }
   }

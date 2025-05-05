@@ -199,7 +199,7 @@ export default function RepliesView() {
       const fetchData = async () => {
         await loadMore(async (page, limit) => {
           const data = await generateMockReplies(page, limit)
-          return filterReplies(data)
+          return filterReplies(data as any[])
         })
       }
       fetchData()
@@ -211,7 +211,7 @@ export default function RepliesView() {
     const handleLoadMore = async () => {
       await loadMore(async (page, limit) => {
         const data = await generateMockReplies(page, limit)
-        return filterReplies(data)
+        return filterReplies(data as any[])
       })
     }
 
@@ -249,7 +249,7 @@ export default function RepliesView() {
   if (initialLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <Spinner size={32} />
+        <Spinner size="lg" />
       </div>
     )
   }

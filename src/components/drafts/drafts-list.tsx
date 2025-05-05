@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/alert-dialog"
 
 // Mock data generator for drafts
-const generateMockDrafts = (page: number, limit: number) => {
+const generateMockDrafts = (page: number, limit: number): Promise<any[]> => {
   // Base mock data
   const baseMockDrafts = [
     {
@@ -219,7 +219,7 @@ export default function DraftsList() {
   if (initialLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <Spinner size={32} />
+        <Spinner size="lg" />
       </div>
     )
   }

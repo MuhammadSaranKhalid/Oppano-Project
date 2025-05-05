@@ -67,13 +67,13 @@ export function DirectMessageList({ searchQuery = "" }: DirectMessageListProps) 
 
   const handleSelectConversation = (conversationId: string) => {
     selectConversation(conversationId)
-    router.push(`/replies/${conversationId}`)
+    router.push(`/dashboard/replies/${conversationId}`)
   }
 
   if (isLoadingDirectMessages) {
     return (
       <div className="flex items-center justify-center py-4">
-        <Spinner size={20} />
+        <Spinner size={"md"} />
       </div>
     )
   }

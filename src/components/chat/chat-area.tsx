@@ -471,13 +471,13 @@ export default function ChatArea({ conversationId }: ChatAreaProps) {
                     sender={{
                       id: sender.id,
                       name: sender.username || "Unknown",
-                      avatar: sender.avatar,
-                      status: sender.status,
+                      // avatar: sender.avatar,
+                      // status: sender.status,
                     }}
                     isCurrentUser={message.senderId === currentUser?.id}
                     hasAttachment={hasImage}
                     attachmentType={hasImage ? "image" : undefined}
-                    attachmentPreview={attachmentPreview}
+                    // attachmentPreview={attachmentPreview}
                     reactions={
                       message.reactions?.map((r) => ({
                         emoji: r.emoji,
@@ -549,7 +549,7 @@ export default function ChatArea({ conversationId }: ChatAreaProps) {
           <EnhancedChatInput
             conversationId={selectedConversation.id}
             onSendMessage={handleSendMessage}
-            inputRef={inputRef}
+            // inputRef={inputRef}
           />
         </div>
       </div>

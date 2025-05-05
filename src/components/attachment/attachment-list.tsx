@@ -2,14 +2,15 @@
 
 import { useState, useEffect } from "react"
 import { useList } from "@refinedev/core"
-import { useNotification } from "@/providers/notification-provider"
+// import { useNotification } from "@/providers/notification-provider"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
 import { formatDateTime } from "@/lib/utils"
 import { Download, Eye, FileText, ImageIcon, Trash, Video, File } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { useSupabase } from "@/providers/supabase-provider"
+// import { useSupabase } from "@/providers/supabase-provider"
+import { supabaseBrowserClient as supabase } from "@utils/supabase/client"
 
 /**
  * AttachmentList component
@@ -18,9 +19,9 @@ import { useSupabase } from "@/providers/supabase-provider"
 export function AttachmentList() {
   const [attachments, setAttachments] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const notification = useNotification()
+  // const notification = useNotification()
   const router = useRouter()
-  const supabase = useSupabase()
+  // const supabase = useSupabase()
 
   // Fetch attachments using Refine's useList hook
   const {
@@ -74,9 +75,9 @@ export function AttachmentList() {
 
       // Update the local state
       setAttachments(attachments.filter((attachment) => attachment.id !== id))
-      notification.success("Attachment deleted successfully")
+      // notification.success("Attachment deleted successfully")
     } catch (error) {
-      notification.error("Failed to delete attachment")
+      // notification.error("Failed to delete attachment")
       console.error(error)
     }
   }

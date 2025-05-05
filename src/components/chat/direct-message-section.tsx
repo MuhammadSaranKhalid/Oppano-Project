@@ -5,9 +5,9 @@ import { ChevronDown, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { Spinner } from "@/components/ui/spinner"
-import DirectMessageItem from "./direct-message-item"
 import { getConversationLabel } from "./utils"
 import { useChatStore } from "@/store/chat-store"
+import { DirectMessageItem } from "./direct-message-item"
 
 export interface DirectMessageSectionProps {
   directMessages: any[]
@@ -44,7 +44,7 @@ const DirectMessageSection = memo(function DirectMessageSection({
         <div className="mt-1 space-y-0">
           {isLoading ? (
             <div className="flex items-center justify-center h-40">
-              <Spinner size={32} />
+              <Spinner size={"lg"} />
             </div>
           ) : directMessages.length > 0 ? (
             directMessages.map((dm) => {
