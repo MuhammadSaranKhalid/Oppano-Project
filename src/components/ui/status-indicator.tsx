@@ -28,7 +28,7 @@ export function StatusIndicator({ status, className, size = "md", showStatusRing
     [UserStatus.OFFLINE]: "bg-gray-400",
     [UserStatus.AWAY]: "bg-yellow-500",
     [UserStatus.DO_NOT_DISTURB]: "bg-red-500",
-    [UserStatus.INVISIBLE]: "bg-gray-400",
+    // [UserStatus.INVISIBLE]: "bg-gray-400",
   }
 
   return (

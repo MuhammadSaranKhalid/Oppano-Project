@@ -1,4 +1,4 @@
-import type { Message } from "@/types"
+// import type { Message } from "@/types"
 
 // Format message time
 export function formatMessageTime(dateString?: Date | string): string {
@@ -27,7 +27,7 @@ export function formatMessageTime(dateString?: Date | string): string {
 }
 
 // Format message preview
-export function formatMessagePreview(message: Message): string {
+export function formatMessagePreview(message: any): string {
   if (!message) return "No messages yet"
 
   if (message.messageType === "TEXT") {

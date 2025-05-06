@@ -69,7 +69,7 @@ export const authProviderClient: AuthProvider = {
       if (data) {
         return {
           success: true,
-          redirectTo: "/",
+          redirectTo: "/login",
         };
       }
     } catch (error: any) {

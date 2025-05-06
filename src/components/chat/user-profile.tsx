@@ -161,10 +161,10 @@ export function UserProfile({ user, isOpen, onClose }: UserProfileProps) {
                         <StatusIndicator status={UserStatus.DO_NOT_DISTURB} className="mr-2" size="sm" />
                         <span>Do not disturb</span>
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleStatusChange(UserStatus.INVISIBLE)}>
+                      {/* <DropdownMenuItem onClick={() => handleStatusChange(UserStatus.INVISIBLE)}>
                         <StatusIndicator status={UserStatus.INVISIBLE} className="mr-2" size="sm" />
                         <span>Invisible</span>
-                      </DropdownMenuItem>
+                      </DropdownMenuItem> */}
                     </DropdownMenuContent>
                   </DropdownMenu>
                 )}

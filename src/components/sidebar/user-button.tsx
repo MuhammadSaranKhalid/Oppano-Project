@@ -93,10 +93,10 @@ export function UserButton() {
           <StatusIndicator status={UserStatus.DO_NOT_DISTURB} className="mr-2" size="sm" />
           <span>Do not disturb</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => updateUserStatus(UserStatus.INVISIBLE)} className="cursor-pointer">
+        {/* <DropdownMenuItem onClick={() => updateUserStatus(UserStatus.INVISIBLE)} className="cursor-pointer">
           <StatusIndicator status={UserStatus.INVISIBLE} className="mr-2" size="sm" />
           <span>Invisible</span>
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer">
           <User className="mr-2 h-4 w-4" />
