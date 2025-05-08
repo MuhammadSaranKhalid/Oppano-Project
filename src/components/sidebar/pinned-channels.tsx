@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge"
 export function PinnedChannels({ searchQuery = "" }: { searchQuery?: string }) {
   const router = useRouter()
   const pathname = usePathname()
-  const { conversations, selectConversation, unpinChannel, unreadCounts } = useChatStore()
+  const { conversations, selectConversation, unreadCounts } = useChatStore()
 
   const [contextMenu, setContextMenu] = useState<{
     isOpen: boolean
@@ -34,7 +34,7 @@ export function PinnedChannels({ searchQuery = "" }: { searchQuery?: string }) {
 
   // Filter pinned channels based on search query
   const pinnedChannels = conversations
-    .filter((c) => c.type === ConversationType.CHANNEL && c.isPinned)
+    .filter((c) => c.type === ConversationType.CHANNEL)
     .filter((c) => searchQuery === "" || c.title?.toLowerCase().includes(searchQuery.toLowerCase()))
 
   const handleSelectChannel = (channelId: string) => {
@@ -70,7 +70,7 @@ export function PinnedChannels({ searchQuery = "" }: { searchQuery?: string }) {
   const handleQuickUnpin = (e: React.MouseEvent, channelId: string) => {
     e.preventDefault()
     e.stopPropagation()
-    unpinChannel(channelId)
+    // unpinChannel(channelId)
   }
 
   // Save button ref

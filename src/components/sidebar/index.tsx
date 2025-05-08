@@ -29,7 +29,7 @@ export function AppSidebar() {
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("")
 
   const pathname = usePathname()
-  const { activeSection, setActiveSection, fetchCurrentUser } = useChatStore()
+  // const { activeSection, setActiveSection, fetchCurrentUser } = useChatStore()
 
   // Debounce search query to improve performance
   useEffect(() => {
@@ -41,27 +41,27 @@ export function AppSidebar() {
   }, [searchQuery])
 
   // Determine active section based on pathname
-  useEffect(() => {
-    if (pathname.startsWith("/dashboard/replies")) {
-      setActiveSection("replies")
-    } else if (pathname.startsWith("/dashboard/activity")) {
-      setActiveSection("activity")
-    } else if (pathname.startsWith("/dashboard/drafts")) {
-      setActiveSection("drafts")
-    } else if (pathname.startsWith("/dashboard/time")) {
-      setActiveSection("time")
-    } else if (pathname.startsWith("/dashboard/files")) {
-      setActiveSection("files")
-    } else if (pathname.startsWith("/dashboard/settings")) {
-      setActiveSection("settings")
-    } else if (pathname.startsWith("/dashboard/more")) {
-      setActiveSection("more")
-    }
-  }, [pathname, setActiveSection])
+  // useEffect(() => {
+  //   if (pathname.startsWith("/dashboard/replies")) {
+  //     // setActiveSection("replies")
+  //   } else if (pathname.startsWith("/dashboard/activity")) {
+  //     // setActiveSection("activity")
+  //   } else if (pathname.startsWith("/dashboard/drafts")) {
+  //     // setActiveSection("drafts")
+  //   } else if (pathname.startsWith("/dashboard/time")) {
+  //     // setActiveSection("time")
+  //   } else if (pathname.startsWith("/dashboard/files")) {
+  //     // setActiveSection("files")
+  //   } else if (pathname.startsWith("/dashboard/settings")) {
+  //     // setActiveSection("settings")
+  //   } else if (pathname.startsWith("/dashboard/more")) {
+  //     // setActiveSection("more")
+  //   }
+  // }, [pathname, setActiveSection])
 
-  useEffect(() => {
-    fetchCurrentUser()
-  }, [fetchCurrentUser])
+  // useEffect(() => {
+  //   fetchCurrentUser()
+  // }, [fetchCurrentUser])
 
   // Hide the sidebar on mobile when navigating to time page
   useEffect(() => {
@@ -177,9 +177,9 @@ export function AppSidebar() {
         </Collapsible>
 
         {/* Divider between persistent sections and tab-specific content */}
-        {activeSection !== "replies" && <div className="h-px bg-gray-200 mx-3 my-3"></div>}
+        {/* {activeSection !== "replies" && <div className="h-px bg-gray-200 mx-3 my-3"></div>} */}
 
-        {/* Tab-specific content */}
+        {/* Tab-specific content
         {activeSection === "activity" ? (
           <div className="max-h-[calc(100%-280px)] overflow-y-auto">
             <SidebarActivity />
@@ -192,7 +192,7 @@ export function AppSidebar() {
           <div className="max-h-[calc(100%-280px)] overflow-y-auto">
             <SidebarMore />
           </div>
-        ) : null}
+        ) : null} */}
       </div>
 
       {/* User profile */}

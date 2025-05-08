@@ -7,7 +7,7 @@ import { useChatStore } from "@/store/chat-store"
 
 export function NavMenu() {
   const router = useRouter()
-  const { activeSection } = useChatStore()
+  // const { activeSection } = useChatStore()
 
   const navItems = [
     {
@@ -59,9 +59,9 @@ export function NavMenu() {
             key={item.id}
             className={cn(
               "flex w-full items-center gap-2 rounded-md px-3 py-1.5 text-sm transition-colors",
-              activeSection === item.section
-                ? "bg-[#fff9e5] text-[#ff6a00] font-medium"
-                : "text-gray-600 hover:bg-gray-100",
+              // activeSection === item.section
+              //   ? "bg-[#fff9e5] text-[#ff6a00] font-medium"
+              //   : "text-gray-600 hover:bg-gray-100",
             )}
             onClick={() => handleNavigation(item.path)}
           >

@@ -48,7 +48,7 @@ export function UserProfile() {
             <Avatar className="h-8 w-8 border border-gray-200">
               <AvatarImage
                 src={
-                  currentUser.avatar || `/placeholder.svg?height=32&width=32&query=${currentUser.username.charAt(0)}`
+                   `/placeholder.svg?height=32&width=32&query=${currentUser.username.charAt(0)}`
                 }
               />
               <AvatarFallback>{currentUser.username.charAt(0)}</AvatarFallback>

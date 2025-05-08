@@ -17,7 +17,7 @@ interface CreateChannelModalProps {
 }
 
 export function CreateChannelModal({ isOpen, onClose }: CreateChannelModalProps) {
-  const { createChannel } = useChatStore()
+  // const { createChannel } = useChatStore()
   const [channelName, setChannelName] = useState("")
   const [channelType, setChannelType] = useState<"public" | "private">("public")
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -43,10 +43,10 @@ export function CreateChannelModal({ isOpen, onClose }: CreateChannelModalProps)
 
     try {
       // Create the channel
-      await createChannel({
-        name: channelName,
-        isPrivate: channelType === "private",
-      })
+      // await createChannel({
+      //   name: channelName,
+      //   isPrivate: channelType === "private",
+      // })
 
       // Reset form and close modal
       setChannelName("")

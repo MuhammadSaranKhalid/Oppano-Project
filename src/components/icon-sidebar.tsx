@@ -51,7 +51,7 @@ const bottomNavItems = [
 export function IconSidebar() {
   const router = useRouter();
   const pathname = usePathname();
-  const { setActiveSection } = useChatStore();
+  // const { setActiveSection } = useChatStore();
 
   // Determine active section based on pathname
   const getActiveSection = (path: string) => {
@@ -70,9 +70,11 @@ export function IconSidebar() {
   const handleNavigation = useCallback(
     (path: string, section: string) => {
       router.push(path);
-      setActiveSection(section);
+      // setActiveSection(section);
     },
-    [router, setActiveSection]
+    [router
+      // , setActiveSection
+    ]
   );
 
   return (

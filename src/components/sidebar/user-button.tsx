@@ -16,17 +16,19 @@ import {
 import { LogOut, Settings, User, HelpCircle } from "lucide-react"
 
 export function UserButton() {
-  const { currentUser, fetchCurrentUser, updateUserStatus } = useChatStore()
+  const { currentUser, 
+    // fetchCurrentUser, updateUserStatus
+   } = useChatStore()
   const [isLoading, setIsLoading] = useState(true)
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     const loadUser = async () => {
-      await fetchCurrentUser()
+      // await fetchCurrentUser()
       setIsLoading(false)
     }
     loadUser()
-  }, [fetchCurrentUser])
+  }, [currentUser])
 
   if (isLoading) {
     return (
@@ -59,7 +61,7 @@ export function UserButton() {
           <div className="relative">
             <Avatar className="h-8 w-8">
               <AvatarImage
-                src={currentUser.avatar || "/placeholder.svg?height=32&width=32&query=portrait"}
+                src={ "/placeholder.svg?height=32&width=32&query=portrait"}
                 alt={currentUser.username}
               />
               <AvatarFallback>{currentUser.username.charAt(0)}</AvatarFallback>
@@ -73,7 +75,7 @@ export function UserButton() {
           <div className="flex flex-col items-start">
             <span className="text-sm font-medium">{currentUser.username}</span>
             <span className="text-xs text-gray-500 flex items-center gap-1">
-              {currentUser.statusMessage || currentUser.status?.toLowerCase() || "online"}
+              {/* {currentUser.statusMessage || currentUser.status?.toLowerCase() || "online"} */}
             </span>
           </div>
         </button>
@@ -81,18 +83,18 @@ export function UserButton() {
       <DropdownMenuContent align="start" className="w-56 z-50 bg-white border border-gray-200 shadow-lg" forceMount>
         <DropdownMenuLabel>Set status</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => updateUserStatus(UserStatus.ONLINE)} className="cursor-pointer">
+        {/* <DropdownMenuItem onClick={() => updateUserStatus(UserStatus.ONLINE)} className="cursor-pointer">
           <StatusIndicator status={UserStatus.ONLINE} className="mr-2" size="sm" />
           <span>Online</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => updateUserStatus(UserStatus.AWAY)} className="cursor-pointer">
+        </DropdownMenuItem> */}
+        {/* <DropdownMenuItem onClick={() => updateUserStatus(UserStatus.AWAY)} className="cursor-pointer">
           <StatusIndicator status={UserStatus.AWAY} className="mr-2" size="sm" />
           <span>Away</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => updateUserStatus(UserStatus.DO_NOT_DISTURB)} className="cursor-pointer">
           <StatusIndicator status={UserStatus.DO_NOT_DISTURB} className="mr-2" size="sm" />
           <span>Do not disturb</span>
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
         {/* <DropdownMenuItem onClick={() => updateUserStatus(UserStatus.INVISIBLE)} className="cursor-pointer">
           <StatusIndicator status={UserStatus.INVISIBLE} className="mr-2" size="sm" />
           <span>Invisible</span>

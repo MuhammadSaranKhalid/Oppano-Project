@@ -13,7 +13,12 @@ import { IconSidebar } from "@components/icon-sidebar";
 import { AppSidebar } from "@components/sidebar";
 import { Toaster } from "@components/ui/toaster";
 import { AuthProvider } from "@components/auth/auth-provider";
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -53,7 +58,8 @@ export default function RootLayout({
                   defaultTheme="light"
                   enableSystem
                 > */}
-                <AuthProvider>{children}</AuthProvider>
+                <AuthProvider>
+                  {children}</AuthProvider>
                 {/* </ThemeProvider> */}
                 <Toaster />
                 {/* {children} */}

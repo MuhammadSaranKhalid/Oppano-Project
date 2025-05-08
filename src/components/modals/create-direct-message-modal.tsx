@@ -17,7 +17,7 @@ interface CreateDirectMessageModalProps {
 }
 
 export function CreateDirectMessageModal({ isOpen, onClose }: CreateDirectMessageModalProps) {
-  const { createDirectMessage, fetchUsers } = useChatStore()
+  // const { createDirectMessage, fetchUsers } = useChatStore()
   const [searchQuery, setSearchQuery] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [users, setUsers] = useState<any[]>([])
@@ -29,20 +29,22 @@ export function CreateDirectMessageModal({ isOpen, onClose }: CreateDirectMessag
   useEffect(() => {
     if (isOpen) {
       setIsLoading(true)
-      fetchUsers()
-        .then((fetchedUsers) => {
-          setUsers(fetchedUsers)
-          setFilteredUsers(fetchedUsers)
-        })
-        .finally(() => {
-          setIsLoading(false)
-        })
+      // fetchUsers()
+      //   .then((fetchedUsers) => {
+      //     setUsers(fetchedUsers)
+      //     setFilteredUsers(fetchedUsers)
+      //   })
+      //   .finally(() => {
+      //     setIsLoading(false)
+      //   })
     } else {
       // Reset state when modal closes
       setSearchQuery("")
       setSelectedUsers([])
     }
-  }, [isOpen, fetchUsers])
+  }, [isOpen
+    // , fetchUsers
+  ])
 
   // Filter users based on search query
   useEffect(() => {
@@ -78,7 +80,7 @@ export function CreateDirectMessageModal({ isOpen, onClose }: CreateDirectMessag
     setIsSubmitting(true)
 
     try {
-      await createDirectMessage(selectedUsers)
+      // await createDirectMessage(selectedUsers)
       onClose()
     } catch (error) {
       console.error("Failed to create direct message:", error)

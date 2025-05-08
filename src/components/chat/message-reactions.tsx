@@ -1,112 +1,163 @@
+// "use client";
+
+// import { useChatStore } from "@/store/chat-store";
+// import { useChatApi } from "@/hooks/use-chat-api";
+// import type { Reaction } from "@/interfaces";
+// import { cn } from "@/lib/utils";
+
+// interface MessageReactionsProps {
+//   messageId: string;
+//   reactions: Reaction[];
+// }
+
+// export function MessageReactions({
+//   messageId,
+//   reactions,
+// }: MessageReactionsProps) {
+//   const { currentUser } = useChatStore();
+//   const { reactToMessage, removeReactionFromMessage } = useChatApi();
+
+//   // Group reactions by emoji
+//   const groupedReactions = reactions.reduce((acc, reaction) => {
+//     if (!acc[reaction.emoji]) {
+//       acc[reaction.emoji] = {
+//         emoji: reaction.emoji,
+//         count: 0,
+//         userIds: [],
+//         reactionIds: [],
+//       };
+//     }
+
+//     acc[reaction.emoji].count++;
+//     acc[reaction.emoji].userIds.push(reaction.user_id);
+//     acc[reaction.emoji].reactionIds.push(reaction.id);
+
+//     return acc;
+//   }, {} as Record<string, { emoji: string; count: number; userIds: string[]; reactionIds: string[] }>);
+
+//   const handleReactionClick = async (
+//     emoji: string,
+//     userIds: string[],
+//     reactionIds: string[]
+//   ) => {
+//     if (!currentUser) return;
+
+//     const currentUserId = currentUser.id;
+//     const hasReacted = userIds.includes(currentUserId);
+
+//     if (hasReacted) {
+//       // Find the reaction ID for the current user
+//       const userReactionId = reactionIds[userIds.indexOf(currentUserId)];
+//       if (userReactionId) {
+//         await removeReactionFromMessage(messageId, userReactionId);
+//       }
+//     } else {
+//       await reactToMessage(messageId, emoji);
+//     }
+//   };
+
+//   return (
+//     <div className="flex mt-1 space-x-1 flex-wrap">
+//       {Object.values(groupedReactions).map((reaction) => (
+//         <button
+//           key={`${messageId}-reaction-${reaction.emoji}`}
+//           className={cn(
+//             "flex items-center rounded-full px-2 py-1 text-xs transition-colors",
+//             reaction.userIds.includes(currentUser?.id || "")
+//               ? "bg-orange-100 text-orange-600 hover:bg-orange-200"
+//               : "bg-gray-100 hover:bg-gray-200"
+//           )}
+//           onClick={() =>
+//             handleReactionClick(
+//               reaction.emoji,
+//               reaction.userIds,
+//               reaction.reactionIds
+//             )
+//           }
+//           title={reaction.userIds.join(", ")}
+//         >
+//           <span className="mr-1">{reaction.emoji}</span>
+//           <span>{reaction.count}</span>
+//         </button>
+//       ))}
+//     </div>
+//   );
+// }
+
+
 "use client"
 
-import { useState } from "react"
-import { Smile } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { useChatStore } from "@/store/chat-store"
+import { useChatApi } from "@/hooks/use-chat-api"
+import type { Reaction } from "@/interfaces"
 import { cn } from "@/lib/utils"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-
-export type Reaction = {
-  emoji: string
-  count: number
-  users: Array<{
-    id: string
-    username: string
-    avatar?: string
-  }>
-}
 
 interface MessageReactionsProps {
-  reactions: Reaction[]
   messageId: string
-  onAddReaction: (messageId: string, emoji: string) => void
-  onRemoveReaction: (messageId: string, emoji: string) => void
-  currentUserId: string
+  reactions: Reaction[]
 }
 
-const COMMON_EMOJIS = ["👍", "❤️", "😂", "🎉", "🙏", "👀", "🔥", "✅"]
+export function MessageReactions({ messageId, reactions }: MessageReactionsProps) {
+  const { currentUser } = useChatStore()
+  const { reactToMessage, removeReactionFromMessage } = useChatApi()
 
-export function MessageReactions({
-  reactions,
-  messageId,
-  onAddReaction,
-  onRemoveReaction,
-  currentUserId,
-}: MessageReactionsProps) {
-  const [isOpen, setIsOpen] = useState(false)
+  // Group reactions by emoji
+  const groupedReactions = reactions.reduce(
+    (acc, reaction) => {
+      if (!acc[reaction.emoji]) {
+        acc[reaction.emoji] = {
+          emoji: reaction.emoji,
+          count: 0,
+          userIds: [],
+          reactionIds: [],
+        }
+      }
 
-  const handleEmojiClick = (emoji: string) => {
-    // Check if the current user has already reacted with this emoji
-    const existingReaction = reactions.find((r) => r.emoji === emoji)
-    const hasUserReacted = existingReaction?.users.some((u) => u.id === currentUserId)
+      acc[reaction.emoji].count++
+      acc[reaction.emoji].userIds.push(reaction.user_id)
+      acc[reaction.emoji].reactionIds.push(reaction.id)
 
-    if (hasUserReacted) {
-      onRemoveReaction(messageId, emoji)
+      return acc
+    },
+    {} as Record<string, { emoji: string; count: number; userIds: string[]; reactionIds: string[] }>,
+  )
+
+  const handleReactionClick = async (emoji: string, userIds: string[], reactionIds: string[]) => {
+    if (!currentUser) return
+
+    const currentUserId = currentUser.id
+    const hasReacted = userIds.includes(currentUserId)
+
+    if (hasReacted) {
+      // Find the reaction ID for the current user
+      const userReactionIndex = userIds.indexOf(currentUserId)
+      if (userReactionIndex !== -1) {
+        const userReactionId = reactionIds[userReactionIndex]
+        await removeReactionFromMessage(messageId, userReactionId)
+      }
     } else {
-      onAddReaction(messageId, emoji)
+      await reactToMessage(messageId, emoji)
     }
-    setIsOpen(false)
-  }
-
-  // Check if a reaction has been made by the current user
-  const hasUserReacted = (reaction: Reaction) => {
-    return reaction.users.some((user) => user.id === currentUserId)
   }
 
   return (
-    <div className="flex items-center gap-1 mt-1">
-      {reactions.map((reaction) => (
-        <TooltipProvider key={reaction.emoji} delayDuration={300}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                className={cn(
-                  "flex items-center gap-1 px-2 py-0.5 rounded-full text-xs border",
-                  hasUserReacted(reaction)
-                    ? "bg-[#fff3d9] border-[#ffdfaa] text-[#ff6a00]"
-                    : "bg-white border-gray-200 hover:bg-gray-50",
-                )}
-                onClick={() => handleEmojiClick(reaction.emoji)}
-                aria-label={`${reaction.emoji} reaction (${reaction.count})`}
-              >
-                <span>{reaction.emoji}</span>
-                <span>{reaction.count}</span>
-              </button>
-            </TooltipTrigger>
-            <TooltipContent side="top" className="text-xs">
-              {reaction.users.map((user) => user.username).join(", ")}
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+    <div className="flex mt-1 space-x-1 flex-wrap">
+      {Object.values(groupedReactions).map((reaction) => (
+        <button
+          key={`${messageId}-reaction-${reaction.emoji}`}
+          className={cn(
+            "flex items-center rounded-full px-2 py-1 text-xs transition-colors",
+            reaction.userIds.includes(currentUser?.id || "")
+              ? "bg-orange-100 text-orange-600 hover:bg-orange-200"
+              : "bg-gray-100 hover:bg-gray-200",
+          )}
+          onClick={() => handleReactionClick(reaction.emoji, reaction.userIds, reaction.reactionIds)}
+          title={reaction.userIds.join(", ")}
+        >
+          <span className="mr-1">{reaction.emoji}</span>
+          <span>{reaction.count}</span>
+        </button>
       ))}
-
-      <Popover open={isOpen} onOpenChange={setIsOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-6 w-6 rounded-full hover:bg-gray-100"
-            aria-label="Add reaction"
-          >
-            <Smile className="h-4 w-4 text-gray-500" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-2" align="start">
-          <div className="flex gap-1">
-            {COMMON_EMOJIS.map((emoji) => (
-              <button
-                key={emoji}
-                className="p-1.5 hover:bg-gray-100 rounded-md"
-                onClick={() => handleEmojiClick(emoji)}
-                aria-label={`Add ${emoji} reaction`}
-              >
-                {emoji}
-              </button>
-            ))}
-          </div>
-        </PopoverContent>
-      </Popover>
     </div>
   )
 }

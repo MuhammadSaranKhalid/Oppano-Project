@@ -20,7 +20,7 @@
 //   // redirect("/dashboard")
 // }
 
-import { StatusUpdateToast } from "@/components/chat/status-update-toast"
+// import { StatusUpdateToast } from "@/components/chat/status-update-toast"
 
 export default function Home() {
   return (
@@ -29,7 +29,7 @@ export default function Home() {
       <p className="text-xl text-center max-w-2xl">
         Navigate through the sidebar to access channels, direct messages, and other features.
       </p>
-      <StatusUpdateToast />
+      {/* <StatusUpdateToast /> */}
     </main>
   )
 }

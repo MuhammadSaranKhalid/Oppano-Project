@@ -1,57 +1,73 @@
+// "use client";
+
+// import type { User } from "@/interfaces";
+
+// interface TypingIndicatorProps {
+//   conversationId: string;
+//   typingUsers: User[];
+// }
+
+// export function TypingIndicator({
+//   conversationId,
+//   typingUsers,
+// }: TypingIndicatorProps) {
+//   if (!typingUsers || typingUsers.length === 0) return null;
+
+//   let typingText = "";
+//   if (typingUsers.length === 1) {
+//     typingText = `${typingUsers[0].username} is typing...`;
+//   } else if (typingUsers.length === 2) {
+//     typingText = `${typingUsers[0].username} and ${typingUsers[1].username} are typing...`;
+//   } else {
+//     typingText = `${typingUsers[0].username} and ${
+//       typingUsers.length - 1
+//     } others are typing...`;
+//   }
+
+//   return (
+//     <div className="flex items-center p-2">
+//       <div className="flex space-x-1 mr-2">
+//         <div className="h-2 w-2 rounded-full bg-[#ff6a00] animate-bounce [animation-delay:-0.3s]"></div>
+//         <div className="h-2 w-2 rounded-full bg-[#ff6a00] animate-bounce [animation-delay:-0.15s]"></div>
+//         <div className="h-2 w-2 rounded-full bg-[#ff6a00] animate-bounce"></div>
+//       </div>
+//       <span className="text-sm text-gray-500">{typingText}</span>
+//     </div>
+//   );
+// }
+
+
 "use client"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { useChatStore } from "@/store/chat-store"
+
+import type { User } from "@/interfaces"
 
 interface TypingIndicatorProps {
   conversationId: string
+  typingUsers: User[]
 }
 
-export function TypingIndicator({ conversationId }: TypingIndicatorProps) {
-  const { getTypingUsers } = useChatStore()
-  const typingUsers = getTypingUsers(conversationId)
+export function TypingIndicator({ conversationId, typingUsers }: TypingIndicatorProps) {
+  if (typingUsers.length === 0) return null
 
-  if (typingUsers.length === 0) {
-    return null
-  }
-
-  if (typingUsers.length === 1) {
-    const user = typingUsers[0]
-    return (
-      <div className="flex items-center gap-2 text-sm text-gray-500">
-        <Avatar className="h-6 w-6">
-          <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.username} />
-          <AvatarFallback>{user.username.charAt(0)}</AvatarFallback>
-        </Avatar>
-        <span>{user.username} is typing</span>
-        <span className="flex gap-0.5">
-          <span className="animate-bounce delay-0">.</span>
-          <span className="animate-bounce delay-150">.</span>
-          <span className="animate-bounce delay-300">.</span>
-        </span>
-      </div>
-    )
+  // Format the typing message
+  const formatTypingMessage = () => {
+    if (typingUsers.length === 1) {
+      return `${typingUsers[0].username} is typing...`
+    } else if (typingUsers.length === 2) {
+      return `${typingUsers[0].username} and ${typingUsers[1].username} are typing...`
+    } else {
+      return `${typingUsers[0].username} and ${typingUsers.length - 1} others are typing...`
+    }
   }
 
   return (
-    <div className="flex items-center gap-2 text-sm text-gray-500">
-      <div className="flex -space-x-2">
-        {typingUsers.slice(0, 3).map((user) => (
-          <Avatar key={user.id} className="h-6 w-6 border-2 border-white">
-            <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.username} />
-            <AvatarFallback>{user.username.charAt(0)}</AvatarFallback>
-          </Avatar>
-        ))}
+    <div className="flex items-center gap-2 text-gray-500 text-sm pl-10">
+      <div className="flex space-x-1">
+        <div className="h-2 w-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: "0ms" }}></div>
+        <div className="h-2 w-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: "150ms" }}></div>
+        <div className="h-2 w-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: "300ms" }}></div>
       </div>
-      <span>
-        {typingUsers.length === 2
-          ? `${typingUsers[0].username} and ${typingUsers[1].username} are typing`
-          : `${typingUsers.length} people are typing`}
-      </span>
-      <span className="flex gap-0.5">
-        <span className="animate-bounce delay-0">.</span>
-        <span className="animate-bounce delay-150">.</span>
-        <span className="animate-bounce delay-300">.</span>
-      </span>
+      <span className="text-xs">{formatTypingMessage()}</span>
     </div>
   )
 }
