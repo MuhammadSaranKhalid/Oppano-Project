@@ -20,7 +20,11 @@ interface ChatAreaProps {
   participants: ConversationParticipant[];
   currentUser?: User | null;
   isLoading: boolean;
-  onSendMessage: (content: string, parentMessageId?: string) => Promise<void>;
+  onSendMessage: (
+    content: string,
+    attachments: Attachment[],
+    parentMessageId?: string
+  ) => Promise<void>;
   typingUsers?: User[];
 }
 
@@ -64,10 +68,14 @@ export function ChatArea({
     attachments: Attachment[] = []
   ) => {
     try {
-      if (!content.trim() && attachments.length === 0) return;
+      // if (!content.trim() && attachments.length === 0) return;
+
+      console.log("ChatArea - Sending message with content:", content)
+      console.log("ChatArea - Attachments:", attachments)
+
 
       // If replying to a message, pass the parent message ID
-      await onSendMessage(content, replyingTo?.id);
+      await onSendMessage(content, attachments, replyingTo?.id);
 
       // Clear the replying state after sending
       setReplyingTo(null);
@@ -198,6 +206,8 @@ export function ChatArea({
               onSendMessage={handleSendMessageWrapper}
               inputRef={inputRef}
               currentUserId={currentUser.id}
+              replyToMessage={replyingTo}
+              // onCancelReply={handleCancelReply}
               organizationId={getOrganizationId()}
             />
           )}

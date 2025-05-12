@@ -150,26 +150,30 @@ export function EnhancedChatInput({
   }, [conversationId, currentUserId, isComposing, updateTypingStatus]);
 
   // Initialize file upload component
-  useEffect(() => {
-    const initializeFileUpload = async () => {
-      try {
-        // Import the function dynamically to avoid server-side issues
-        const { ensureStorageBucket } = await import("@/lib/supabase");
+  // useEffect(() => {
+  //   const initializeFileUpload = async () => {
+  //     try {
+  //       // Import the function dynamically to avoid server-side issues
+  //       const { ensureStorageBucket } = await import("@/lib/supabase");
 
-        // Ensure the storage bucket exists - use "oppano" as the bucket name
-        await ensureStorageBucket("oppano");
-        console.log("File upload initialized successfully with bucket: oppano");
-      } catch (error) {
-        console.error("Error initializing file upload:", error);
-      }
-    };
+  //       // Ensure the storage bucket exists - use "oppano" as the bucket name
+  //       await ensureStorageBucket("oppano");
+  //       console.log("File upload initialized successfully with bucket: oppano");
+  //     } catch (error) {
+  //       console.error("Error initializing file upload:", error);
+  //     }
+  //   };
 
-    initializeFileUpload();
-  }, []);
+  //   initializeFileUpload();
+  // }, []);
 
   const handleSendMessage = async () => {
+    // FIXED: Allow sending if there's either text content OR attachments
     if (message.trim() || attachments.length > 0) {
       try {
+        console.log("Sending message with content:", message);
+        console.log("Sending attachments:", attachments);
+
         await onSendMessage(message.trim(), attachments);
         setMessage("");
         setAttachments([]);
@@ -257,16 +261,6 @@ export function EnhancedChatInput({
 
     for (const file of Array.from(files)) {
       console.log("Processing file:", file.name, file.type, file.size);
-
-      // const type = fileType
-      //   ? fileType
-      //   : file.type.startsWith("image/")
-      //     ? "image"
-      //     : file.type.startsWith("video/")
-      //       ? "video"
-      //       : file.type.startsWith("audio/")
-      //         ? "audio"
-      //         : "file"
 
       const type: any = fileType
         ? fileType
@@ -422,25 +416,43 @@ export function EnhancedChatInput({
     );
   };
 
+  // useEffect(() => {
+  //   if (replyToMessage) {
+  //     textareaRef.current?.focus();
+  //   }
+  // }, [replyToMessage]);
+
+  // Set reply state from prop
   useEffect(() => {
     if (replyToMessage) {
+      setReplyingToMessage(replyToMessage);
       textareaRef.current?.focus();
     }
-  }, [replyToMessage]);
+  }, [replyToMessage, setReplyingToMessage]);
 
   return (
     <div className="border-t p-4">
       {/* Reply indicator */}
-      {replyToMessage && (
+      {/* {replyToMessage && ( */}
+      {(replyToMessage || replyingToMessage) && (
         <div className="flex items-center justify-between mb-2 p-2 bg-gray-50 rounded-md">
           <div className="flex flex-col">
             <span className="text-xs text-gray-500">
-              Replying to{" "}
+              {/* Replying to{" "}
               <span className="font-medium">
                 {replyToMessage.sender?.username || "Unknown"}
               </span>
+            </span> */}
+              Replying to{" "}
+              <span className="font-medium">
+                {(replyToMessage || replyingToMessage)?.sender?.username ||
+                  "Unknown"}
+              </span>
             </span>
-            <span className="text-sm truncate">{replyToMessage.content}</span>
+            {/* <span className="text-sm truncate">{replyToMessage.content}</span> */}
+            <span className="text-sm truncate">
+              {(replyToMessage || replyingToMessage)?.content}
+            </span>
           </div>
           <Button variant="ghost" size="icon" onClick={onCancelReply}>
             <X className="h-4 w-4" />
@@ -653,6 +665,7 @@ export function EnhancedChatInput({
             size="icon"
             className="h-8 w-8 rounded-full bg-[#ff6a00] text-white hover:bg-[#ff8c40]"
             onClick={handleSendMessage}
+            // FIXED: Enable the button if there's either text content OR attachments
             disabled={!message.trim() && attachments.length === 0}
             aria-label="Send message"
           >

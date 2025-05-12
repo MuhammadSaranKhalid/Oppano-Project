@@ -40,7 +40,7 @@ export default function RootLayout({
         <Suspense>
           {/* <GitHubBanner /> */}
           <RefineKbarProvider>
-            <DevtoolsProvider>
+            {/* <DevtoolsProvider> */}
               <Refine
                 routerProvider={routerProvider}
                 authProvider={authProviderClient}
@@ -65,7 +65,7 @@ export default function RootLayout({
                 {/* {children} */}
                 <RefineKbar />
               </Refine>
-            </DevtoolsProvider>
+            {/* </DevtoolsProvider> */}
           </RefineKbarProvider>
         </Suspense>
       </body>

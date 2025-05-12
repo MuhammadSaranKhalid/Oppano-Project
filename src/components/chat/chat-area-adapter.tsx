@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -9,6 +8,7 @@ import { ChatArea } from "./chat-area";
 import type { Message, User } from "@/interfaces";
 import { getCurrentUser } from "@/lib/supabase-client";
 import { supabaseBrowserClient } from "@utils/supabase/client";
+import { Attachment } from "./enhanced-chat-input";
 
 interface ChatAreaAdapterProps {
   conversationId: string;
@@ -154,16 +154,17 @@ export function ChatAreaAdapter({ conversationId }: ChatAreaAdapterProps) {
 
   const handleSendMessage = async (
     content: string,
+    attachments: Attachment[] = [],
     parentMessageId?: string
   ) => {
-    if (!currentUser || !content.trim()) return;
+    // if (!currentUser || !content.trim()) return;
 
     try {
       // Change this line to pass an empty array as the attachments parameter
       const newMessage = await sendMessage(
         conversationId,
         content,
-        [],
+        attachments,
         parentMessageId
       );
       if (newMessage) {

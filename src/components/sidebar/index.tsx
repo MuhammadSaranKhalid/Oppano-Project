@@ -1,44 +1,53 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { usePathname } from "next/navigation"
-import { ChevronDown, Plus, Search } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { NavMenu } from "./nav-menu"
-import { ChannelList } from "./channel-list"
-import { DirectMessageList } from "./direct-message-list"
-import { PinnedChannels } from "./pinned-channels"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { Button } from "@/components/ui/button"
-import { CreateChannelModal } from "@/components/modals/create-channel-modal"
-import { CreateDirectMessageModal } from "@/components/modals/create-direct-message-modal"
-import { UserProfile } from "./user-profile"
-import { SidebarActivity } from "./sidebar-activity"
-import { SidebarDrafts } from "./sidebar-drafts"
-import { SidebarMore } from "./sidebar-more"
-import { useChatStore } from "@/store/chat-store"
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { ChevronDown, Plus, Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { NavMenu } from "./nav-menu";
+import { ChannelList } from "./channel-list";
+import { DirectMessageList } from "./direct-message-list";
+import { PinnedChannels } from "./pinned-channels";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { Button } from "@/components/ui/button";
+import { CreateChannelModal } from "@/components/modals/create-channel-modal";
+import { CreateDirectMessageModal } from "@/components/modals/create-direct-message-modal";
+import { UserProfile } from "./user-profile";
 
-export type SidebarTab = "messages" | "activity" | "drafts" | "more" | "time" | "files" | "settings"
+export type SidebarTab =
+  | "messages"
+  | "activity"
+  | "drafts"
+  | "more"
+  | "time"
+  | "files"
+  | "settings";
 
 export function AppSidebar() {
-  const [channelsOpen, setChannelsOpen] = useState(true)
-  const [directMessagesOpen, setDirectMessagesOpen] = useState(true)
-  const [isCreateChannelModalOpen, setIsCreateChannelModalOpen] = useState(false)
-  const [isCreateDirectMessageModalOpen, setIsCreateDirectMessageModalOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("")
+  const [channelsOpen, setChannelsOpen] = useState(true);
+  const [directMessagesOpen, setDirectMessagesOpen] = useState(true);
+  const [isCreateChannelModalOpen, setIsCreateChannelModalOpen] =
+    useState(false);
+  const [isCreateDirectMessageModalOpen, setIsCreateDirectMessageModalOpen] =
+    useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
 
-  const pathname = usePathname()
+  const pathname = usePathname();
   // const { activeSection, setActiveSection, fetchCurrentUser } = useChatStore()
 
   // Debounce search query to improve performance
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDebouncedSearchQuery(searchQuery)
-    }, 300)
+      setDebouncedSearchQuery(searchQuery);
+    }, 300);
 
-    return () => clearTimeout(timer)
-  }, [searchQuery])
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   // Determine active section based on pathname
   // useEffect(() => {
@@ -66,23 +75,23 @@ export function AppSidebar() {
   // Hide the sidebar on mobile when navigating to time page
   useEffect(() => {
     const handleResize = () => {
-      const isMobile = window.innerWidth < 768
+      const isMobile = window.innerWidth < 768;
       if (isMobile && pathname.startsWith("/dashboard/time")) {
-        document.body.classList.add("sidebar-collapsed")
+        document.body.classList.add("sidebar-collapsed");
       } else {
-        document.body.classList.remove("sidebar-collapsed")
+        document.body.classList.remove("sidebar-collapsed");
       }
-    }
+    };
 
-    handleResize()
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [pathname])
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [pathname]);
 
   // Handle search clear
   const handleClearSearch = () => {
-    setSearchQuery("")
-  }
+    setSearchQuery("");
+  };
 
   return (
     <div className="flex h-full w-[280px] flex-col border-r bg-white md:w-[280px] sidebar-container">
@@ -133,10 +142,18 @@ export function AppSidebar() {
         <PinnedChannels searchQuery={debouncedSearchQuery} />
 
         {/* Channels section - always visible */}
-        <Collapsible open={channelsOpen} onOpenChange={setChannelsOpen} className="mt-2">
+        <Collapsible
+          open={channelsOpen}
+          onOpenChange={setChannelsOpen}
+          className="mt-2"
+        >
           <div className="flex items-center justify-between py-1 px-3">
             <CollapsibleTrigger className="flex items-center gap-1 text-sm font-medium">
-              <ChevronDown className={`h-4 w-4 ${channelsOpen ? "" : "-rotate-90"} transition-transform`} />
+              <ChevronDown
+                className={`h-4 w-4 ${
+                  channelsOpen ? "" : "-rotate-90"
+                } transition-transform`}
+              />
               <span>Loopz</span>
             </CollapsibleTrigger>
             <Button
@@ -155,10 +172,18 @@ export function AppSidebar() {
         </Collapsible>
 
         {/* Direct Messages section - always visible */}
-        <Collapsible open={directMessagesOpen} onOpenChange={setDirectMessagesOpen} className="mt-4">
+        <Collapsible
+          open={directMessagesOpen}
+          onOpenChange={setDirectMessagesOpen}
+          className="mt-4"
+        >
           <div className="flex items-center justify-between py-1 px-3">
             <CollapsibleTrigger className="flex items-center gap-1 text-sm font-medium">
-              <ChevronDown className={`h-4 w-4 ${directMessagesOpen ? "" : "-rotate-90"} transition-transform`} />
+              <ChevronDown
+                className={`h-4 w-4 ${
+                  directMessagesOpen ? "" : "-rotate-90"
+                } transition-transform`}
+              />
               <span>Direct Messages</span>
             </CollapsibleTrigger>
             <Button
@@ -201,7 +226,10 @@ export function AppSidebar() {
       </div>
 
       {/* Create Channel Modal */}
-      <CreateChannelModal isOpen={isCreateChannelModalOpen} onClose={() => setIsCreateChannelModalOpen(false)} />
+      <CreateChannelModal
+        isOpen={isCreateChannelModalOpen}
+        onClose={() => setIsCreateChannelModalOpen(false)}
+      />
 
       {/* Create Direct Message Modal */}
       <CreateDirectMessageModal
@@ -209,5 +237,5 @@ export function AppSidebar() {
         onClose={() => setIsCreateDirectMessageModalOpen(false)}
       />
     </div>
-  )
+  );
 }

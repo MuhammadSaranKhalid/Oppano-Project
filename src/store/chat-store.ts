@@ -3,19 +3,6 @@ import { devtools, persist } from "zustand/middleware"
 import type { Conversation, ConversationParticipant, Message, User, Reaction } from "@/interfaces"
 import { UserStatus } from "@/interfaces"
 
-// Mock data for initial state
-const mockUser = {
-  id: "user-1",
-  username: "Cristal Parker",
-  email: "cristal@example.com",
-  profile_picture: "/abstract-geometric-shapes.png",
-  status: UserStatus.ONLINE,
-  status_message: "Working on designs",
-  last_active: new Date().toISOString(),
-  created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString(),
-}
-
 interface ChatState {
   // Current user
   currentUser: User | null
